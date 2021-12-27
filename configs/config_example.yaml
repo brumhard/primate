@@ -1,0 +1,11 @@
+loglevel: info
+providers:
+  - providerType: "azuredevops"
+    repositories:
+      - "project/repo"
+    extraConfig:
+      organizationUrl: "https://dev.azure.com/myorg"
+      pat: "xxxxxxxxxx"
+  - providerType: "github"
+    repositories:
+      - "owner/repo"
