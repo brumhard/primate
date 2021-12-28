@@ -22,7 +22,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DashboardServiceClient interface {
-	GetExample(ctx context.Context, in *GetExampleRequest, opts ...grpc.CallOption) (*GetExampleResponse, error)
+	ListPullRequests(ctx context.Context, in *ListPullRequestsRequest, opts ...grpc.CallOption) (*ListPullRequestsResponse, error)
+	StreamPullRequests(ctx context.Context, in *StreamPullRequestsRequest, opts ...grpc.CallOption) (DashboardService_StreamPullRequestsClient, error)
 }
 
 type dashboardServiceClient struct {
@@ -33,20 +34,53 @@ func NewDashboardServiceClient(cc grpc.ClientConnInterface) DashboardServiceClie
 	return &dashboardServiceClient{cc}
 }
 
-func (c *dashboardServiceClient) GetExample(ctx context.Context, in *GetExampleRequest, opts ...grpc.CallOption) (*GetExampleResponse, error) {
-	out := new(GetExampleResponse)
-	err := c.cc.Invoke(ctx, "/awesomecli.v1.DashboardService/GetExample", in, out, opts...)
+func (c *dashboardServiceClient) ListPullRequests(ctx context.Context, in *ListPullRequestsRequest, opts ...grpc.CallOption) (*ListPullRequestsResponse, error) {
+	out := new(ListPullRequestsResponse)
+	err := c.cc.Invoke(ctx, "/dashboard.v1.DashboardService/ListPullRequests", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
+func (c *dashboardServiceClient) StreamPullRequests(ctx context.Context, in *StreamPullRequestsRequest, opts ...grpc.CallOption) (DashboardService_StreamPullRequestsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &DashboardService_ServiceDesc.Streams[0], "/dashboard.v1.DashboardService/StreamPullRequests", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &dashboardServiceStreamPullRequestsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type DashboardService_StreamPullRequestsClient interface {
+	Recv() (*PullRequest, error)
+	grpc.ClientStream
+}
+
+type dashboardServiceStreamPullRequestsClient struct {
+	grpc.ClientStream
+}
+
+func (x *dashboardServiceStreamPullRequestsClient) Recv() (*PullRequest, error) {
+	m := new(PullRequest)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // DashboardServiceServer is the server API for DashboardService service.
 // All implementations must embed UnimplementedDashboardServiceServer
 // for forward compatibility
 type DashboardServiceServer interface {
-	GetExample(context.Context, *GetExampleRequest) (*GetExampleResponse, error)
+	ListPullRequests(context.Context, *ListPullRequestsRequest) (*ListPullRequestsResponse, error)
+	StreamPullRequests(*StreamPullRequestsRequest, DashboardService_StreamPullRequestsServer) error
 	mustEmbedUnimplementedDashboardServiceServer()
 }
 
@@ -54,8 +88,11 @@ type DashboardServiceServer interface {
 type UnimplementedDashboardServiceServer struct {
 }
 
-func (UnimplementedDashboardServiceServer) GetExample(context.Context, *GetExampleRequest) (*GetExampleResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetExample not implemented")
+func (UnimplementedDashboardServiceServer) ListPullRequests(context.Context, *ListPullRequestsRequest) (*ListPullRequestsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPullRequests not implemented")
+}
+func (UnimplementedDashboardServiceServer) StreamPullRequests(*StreamPullRequestsRequest, DashboardService_StreamPullRequestsServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamPullRequests not implemented")
 }
 func (UnimplementedDashboardServiceServer) mustEmbedUnimplementedDashboardServiceServer() {}
 
@@ -70,36 +107,63 @@ func RegisterDashboardServiceServer(s grpc.ServiceRegistrar, srv DashboardServic
 	s.RegisterService(&DashboardService_ServiceDesc, srv)
 }
 
-func _DashboardService_GetExample_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetExampleRequest)
+func _DashboardService_ListPullRequests_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPullRequestsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DashboardServiceServer).GetExample(ctx, in)
+		return srv.(DashboardServiceServer).ListPullRequests(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/awesomecli.v1.DashboardService/GetExample",
+		FullMethod: "/dashboard.v1.DashboardService/ListPullRequests",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DashboardServiceServer).GetExample(ctx, req.(*GetExampleRequest))
+		return srv.(DashboardServiceServer).ListPullRequests(ctx, req.(*ListPullRequestsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
+}
+
+func _DashboardService_StreamPullRequests_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(StreamPullRequestsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(DashboardServiceServer).StreamPullRequests(m, &dashboardServiceStreamPullRequestsServer{stream})
+}
+
+type DashboardService_StreamPullRequestsServer interface {
+	Send(*PullRequest) error
+	grpc.ServerStream
+}
+
+type dashboardServiceStreamPullRequestsServer struct {
+	grpc.ServerStream
+}
+
+func (x *dashboardServiceStreamPullRequestsServer) Send(m *PullRequest) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 // DashboardService_ServiceDesc is the grpc.ServiceDesc for DashboardService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DashboardService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "awesomecli.v1.DashboardService",
+	ServiceName: "dashboard.v1.DashboardService",
 	HandlerType: (*DashboardServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetExample",
-			Handler:    _DashboardService_GetExample_Handler,
+			MethodName: "ListPullRequests",
+			Handler:    _DashboardService_ListPullRequests_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "StreamPullRequests",
+			Handler:       _DashboardService_StreamPullRequests_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "dashboard/v1/dashboard.proto",
 }

@@ -35,123 +35,22 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on GetExampleRequest with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *GetExampleRequest) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on GetExampleRequest with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the result is a list of violation errors wrapped in
-// GetExampleRequestMultiError, or nil if none found.
-func (m *GetExampleRequest) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *GetExampleRequest) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	if len(errors) > 0 {
-		return GetExampleRequestMultiError(errors)
-	}
-	return nil
-}
-
-// GetExampleRequestMultiError is an error wrapping multiple validation errors
-// returned by GetExampleRequest.ValidateAll() if the designated constraints
-// aren't met.
-type GetExampleRequestMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m GetExampleRequestMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m GetExampleRequestMultiError) AllErrors() []error { return m }
-
-// GetExampleRequestValidationError is the validation error returned by
-// GetExampleRequest.Validate if the designated constraints aren't met.
-type GetExampleRequestValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e GetExampleRequestValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e GetExampleRequestValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e GetExampleRequestValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e GetExampleRequestValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e GetExampleRequestValidationError) ErrorName() string {
-	return "GetExampleRequestValidationError"
-}
-
-// Error satisfies the builtin error interface
-func (e GetExampleRequestValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sGetExampleRequest.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = GetExampleRequestValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = GetExampleRequestValidationError{}
-
-// Validate checks the field values on GetExampleResponse with the rules
+// Validate checks the field values on ListPullRequestsRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *GetExampleResponse) Validate() error {
+func (m *ListPullRequestsRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on GetExampleResponse with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on ListPullRequestsRequest with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// GetExampleResponseMultiError, or nil if none found.
-func (m *GetExampleResponse) ValidateAll() error {
+// ListPullRequestsRequestMultiError, or nil if none found.
+func (m *ListPullRequestsRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *GetExampleResponse) validate(all bool) error {
+func (m *ListPullRequestsRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -159,18 +58,18 @@ func (m *GetExampleResponse) validate(all bool) error {
 	var errors []error
 
 	if len(errors) > 0 {
-		return GetExampleResponseMultiError(errors)
+		return ListPullRequestsRequestMultiError(errors)
 	}
 	return nil
 }
 
-// GetExampleResponseMultiError is an error wrapping multiple validation errors
-// returned by GetExampleResponse.ValidateAll() if the designated constraints
-// aren't met.
-type GetExampleResponseMultiError []error
+// ListPullRequestsRequestMultiError is an error wrapping multiple validation
+// errors returned by ListPullRequestsRequest.ValidateAll() if the designated
+// constraints aren't met.
+type ListPullRequestsRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m GetExampleResponseMultiError) Error() string {
+func (m ListPullRequestsRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -179,11 +78,11 @@ func (m GetExampleResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m GetExampleResponseMultiError) AllErrors() []error { return m }
+func (m ListPullRequestsRequestMultiError) AllErrors() []error { return m }
 
-// GetExampleResponseValidationError is the validation error returned by
-// GetExampleResponse.Validate if the designated constraints aren't met.
-type GetExampleResponseValidationError struct {
+// ListPullRequestsRequestValidationError is the validation error returned by
+// ListPullRequestsRequest.Validate if the designated constraints aren't met.
+type ListPullRequestsRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -191,24 +90,24 @@ type GetExampleResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetExampleResponseValidationError) Field() string { return e.field }
+func (e ListPullRequestsRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetExampleResponseValidationError) Reason() string { return e.reason }
+func (e ListPullRequestsRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetExampleResponseValidationError) Cause() error { return e.cause }
+func (e ListPullRequestsRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetExampleResponseValidationError) Key() bool { return e.key }
+func (e ListPullRequestsRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetExampleResponseValidationError) ErrorName() string {
-	return "GetExampleResponseValidationError"
+func (e ListPullRequestsRequestValidationError) ErrorName() string {
+	return "ListPullRequestsRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e GetExampleResponseValidationError) Error() string {
+func (e ListPullRequestsRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -220,14 +119,14 @@ func (e GetExampleResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetExampleResponse.%s: %s%s",
+		"invalid %sListPullRequestsRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetExampleResponseValidationError{}
+var _ error = ListPullRequestsRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -235,4 +134,342 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetExampleResponseValidationError{}
+} = ListPullRequestsRequestValidationError{}
+
+// Validate checks the field values on StreamPullRequestsRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *StreamPullRequestsRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on StreamPullRequestsRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// StreamPullRequestsRequestMultiError, or nil if none found.
+func (m *StreamPullRequestsRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *StreamPullRequestsRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(errors) > 0 {
+		return StreamPullRequestsRequestMultiError(errors)
+	}
+	return nil
+}
+
+// StreamPullRequestsRequestMultiError is an error wrapping multiple validation
+// errors returned by StreamPullRequestsRequest.ValidateAll() if the
+// designated constraints aren't met.
+type StreamPullRequestsRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m StreamPullRequestsRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m StreamPullRequestsRequestMultiError) AllErrors() []error { return m }
+
+// StreamPullRequestsRequestValidationError is the validation error returned by
+// StreamPullRequestsRequest.Validate if the designated constraints aren't met.
+type StreamPullRequestsRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e StreamPullRequestsRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e StreamPullRequestsRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e StreamPullRequestsRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e StreamPullRequestsRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e StreamPullRequestsRequestValidationError) ErrorName() string {
+	return "StreamPullRequestsRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e StreamPullRequestsRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sStreamPullRequestsRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = StreamPullRequestsRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = StreamPullRequestsRequestValidationError{}
+
+// Validate checks the field values on ListPullRequestsResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListPullRequestsResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListPullRequestsResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListPullRequestsResponseMultiError, or nil if none found.
+func (m *ListPullRequestsResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListPullRequestsResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetItems() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListPullRequestsResponseValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListPullRequestsResponseValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListPullRequestsResponseValidationError{
+					field:  fmt.Sprintf("Items[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ListPullRequestsResponseMultiError(errors)
+	}
+	return nil
+}
+
+// ListPullRequestsResponseMultiError is an error wrapping multiple validation
+// errors returned by ListPullRequestsResponse.ValidateAll() if the designated
+// constraints aren't met.
+type ListPullRequestsResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListPullRequestsResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListPullRequestsResponseMultiError) AllErrors() []error { return m }
+
+// ListPullRequestsResponseValidationError is the validation error returned by
+// ListPullRequestsResponse.Validate if the designated constraints aren't met.
+type ListPullRequestsResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListPullRequestsResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListPullRequestsResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListPullRequestsResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListPullRequestsResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListPullRequestsResponseValidationError) ErrorName() string {
+	return "ListPullRequestsResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListPullRequestsResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListPullRequestsResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListPullRequestsResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListPullRequestsResponseValidationError{}
+
+// Validate checks the field values on PullRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PullRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PullRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PullRequestMultiError, or
+// nil if none found.
+func (m *PullRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PullRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Title
+
+	// no validation rules for Url
+
+	if len(errors) > 0 {
+		return PullRequestMultiError(errors)
+	}
+	return nil
+}
+
+// PullRequestMultiError is an error wrapping multiple validation errors
+// returned by PullRequest.ValidateAll() if the designated constraints aren't met.
+type PullRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PullRequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PullRequestMultiError) AllErrors() []error { return m }
+
+// PullRequestValidationError is the validation error returned by
+// PullRequest.Validate if the designated constraints aren't met.
+type PullRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PullRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PullRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PullRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PullRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PullRequestValidationError) ErrorName() string { return "PullRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PullRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPullRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PullRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PullRequestValidationError{}

@@ -16,18 +16,21 @@ import 'dashboard.pbjson.dart';
 export 'dashboard.pb.dart';
 
 abstract class DashboardServiceBase extends $pb.GeneratedService {
-  $async.Future<$0.GetExampleResponse> getExample($pb.ServerContext ctx, $0.GetExampleRequest request);
+  $async.Future<$0.ListPullRequestsResponse> listPullRequests($pb.ServerContext ctx, $0.ListPullRequestsRequest request);
+  $async.Future<$0.PullRequest> streamPullRequests($pb.ServerContext ctx, $0.StreamPullRequestsRequest request);
 
   $pb.GeneratedMessage createRequest($core.String method) {
     switch (method) {
-      case 'GetExample': return $0.GetExampleRequest();
+      case 'ListPullRequests': return $0.ListPullRequestsRequest();
+      case 'StreamPullRequests': return $0.StreamPullRequestsRequest();
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String method, $pb.GeneratedMessage request) {
     switch (method) {
-      case 'GetExample': return this.getExample(ctx, request as $0.GetExampleRequest);
+      case 'ListPullRequests': return this.listPullRequests(ctx, request as $0.ListPullRequestsRequest);
+      case 'StreamPullRequests': return this.streamPullRequests(ctx, request as $0.StreamPullRequestsRequest);
       default: throw $core.ArgumentError('Unknown method: $method');
     }
   }

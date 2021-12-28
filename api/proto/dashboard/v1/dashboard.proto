@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package awesomecli.v1;
+package dashboard.v1;
 
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
@@ -14,9 +14,19 @@ import "validate/validate.proto";
 option go_package = "github.com/brumhard/pr-dashboard/pkg/pb;pb";
 
 service DashboardService {
-  rpc GetExample(GetExampleRequest) returns (GetExampleResponse) {}
+  rpc ListPullRequests(ListPullRequestsRequest) returns (ListPullRequestsResponse) {}
+  rpc StreamPullRequests(StreamPullRequestsRequest) returns (stream PullRequest) {}
 }
 
-message GetExampleRequest {}
+message ListPullRequestsRequest {}
 
-message GetExampleResponse {}
+message StreamPullRequestsRequest {}
+
+message ListPullRequestsResponse {
+  repeated PullRequest items = 1;
+}
+
+message PullRequest {
+  string title = 1;
+  string url = 2;
+}
