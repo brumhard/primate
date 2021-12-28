@@ -4,7 +4,7 @@
 // - protoc             v3.17.3
 // source: dashboard/v1/dashboard.proto
 
-package pb
+package dashboard
 
 import (
 	context "context"
