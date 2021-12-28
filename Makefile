@@ -6,7 +6,7 @@ GOLANGCI_VERSION = 1.43.0
 DOCKER_REPO = dashboard
 DOCKER_TAG = latest
 
-all: git-hooks  tidy ## Initializes all tools
+all: git-hooks generate tidy ## Initializes all tools
 
 out:
 	@mkdir -p out
@@ -66,10 +66,46 @@ out/report.json: out
 	@go test -count 1 ./... -coverprofile=out/cover.out --json | tee "$(@)"
 
 clean: ## Cleans up everything
-	@rm -rf bin out 
+	@rm -rf bin out protodeps
 
 docker: ## Builds docker image
 	docker buildx build -t $(DOCKER_REPO):$(DOCKER_TAG) .
+# Go dependencies versioned through tools.go
+GO_DEPENDENCIES = google.golang.org/protobuf/cmd/protoc-gen-go \
+				google.golang.org/grpc/cmd/protoc-gen-go-grpc \
+				github.com/envoyproxy/protoc-gen-validate \
+				github.com/bufbuild/buf/cmd/buf \
+                github.com/bufbuild/buf/cmd/protoc-gen-buf-breaking \
+                github.com/bufbuild/buf/cmd/protoc-gen-buf-lint
+
+define make-go-dependency
+  # target template for go tools, can be referenced e.g. via /bin/<tool>
+  bin/$(notdir $1):
+	GOBIN=$(PWD)/bin go install $1
+endef
+
+# this creates a target for each go dependency to be referenced in other targets
+$(foreach dep, $(GO_DEPENDENCIES), $(eval $(call make-go-dependency, $(dep))))
+
+api/proto/google:
+	@mkdir -p api/proto/google/api
+	curl -s https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/annotations.proto -o api/proto/google/api/annotations.proto
+	curl -s https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/http.proto -o api/proto/google/api/http.proto
+	curl -s https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/field_behavior.proto -o api/proto/google/api/field_behavior.proto
+
+api/proto/validate:
+	@mkdir -p api/proto/validate
+	curl -s https://raw.githubusercontent.com/envoyproxy/protoc-gen-validate/main/validate/validate.proto -o api/proto/validate/validate.proto
+
+protolint: bin/buf bin/protoc-gen-buf-lint ## Lints your protobuf files
+	bin/buf lint
+
+protobreaking: bin/buf bin/protoc-gen-buf-breaking ## Compares your current protobuf with the version on master to find breaking changes
+	bin/buf breaking --against '.git#branch=master'
+
+generate: ## Generates code from protobuf files
+generate: api/proto/google api/proto/validate  bin/buf bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-validate
+	PATH=$(PWD)/bin:$$PATH buf generate --path api/proto/dashboard/v1/dashboard.proto
 
 ci: lint-reports test-reports ## Executes lint and test and generates reports
 

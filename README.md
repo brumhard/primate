@@ -14,8 +14,20 @@ make help
 
 ## Setup
 
-To get your setup up and running the only thing you have to do is
+To get your setup up and running do the following.
 
+- install dart and flutter
+- install protoc-gen-dart
+  ```shell
+  flutter pub global activate protoc_plugin
+  ```
+- add pub cache bin folder to `PATH`
+  ```shell
+  export PATH="$PATH:$HOME/.pub-cache/bin"
+  # or if on flutter it could also be sth like
+  export PATH="$PATH":"$HOME/sdk/flutter/.pub-cache/bin"
+  ```
+- setup everything else:
 ```bash
 make all
 ```
