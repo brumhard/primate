@@ -37,6 +37,8 @@ dependencies:
   protobuf: ^2.0.1
   grpc: ^3.0.2
   async: ^2.8.2
+  url_launcher: ^6.0.17
+  provider: ^6.0.1
 
 dev_dependencies:
   flutter_test:
