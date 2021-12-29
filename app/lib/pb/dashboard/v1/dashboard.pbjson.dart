@@ -43,21 +43,3 @@ const PullRequest$json = const {
 
 /// Descriptor for `PullRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List pullRequestDescriptor = $convert.base64Decode('CgtQdWxsUmVxdWVzdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSEAoDdXJsGAIgASgJUgN1cmw=');
-const $core.Map<$core.String, $core.dynamic> DashboardServiceBase$json = const {
-  '1': 'DashboardService',
-  '2': const [
-    const {'1': 'ListPullRequests', '2': '.dashboard.v1.ListPullRequestsRequest', '3': '.dashboard.v1.ListPullRequestsResponse', '4': const {}},
-    const {'1': 'StreamPullRequests', '2': '.dashboard.v1.StreamPullRequestsRequest', '3': '.dashboard.v1.PullRequest', '4': const {}, '6': true},
-  ],
-};
-
-@$core.Deprecated('Use dashboardServiceDescriptor instead')
-const $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> DashboardServiceBase$messageJson = const {
-  '.dashboard.v1.ListPullRequestsRequest': ListPullRequestsRequest$json,
-  '.dashboard.v1.ListPullRequestsResponse': ListPullRequestsResponse$json,
-  '.dashboard.v1.PullRequest': PullRequest$json,
-  '.dashboard.v1.StreamPullRequestsRequest': StreamPullRequestsRequest$json,
-};
-
-/// Descriptor for `DashboardService`. Decode as a `google.protobuf.ServiceDescriptorProto`.
-final $typed_data.Uint8List dashboardServiceDescriptor = $convert.base64Decode('ChBEYXNoYm9hcmRTZXJ2aWNlEmMKEExpc3RQdWxsUmVxdWVzdHMSJS5kYXNoYm9hcmQudjEuTGlzdFB1bGxSZXF1ZXN0c1JlcXVlc3QaJi5kYXNoYm9hcmQudjEuTGlzdFB1bGxSZXF1ZXN0c1Jlc3BvbnNlIgASXAoSU3RyZWFtUHVsbFJlcXVlc3RzEicuZGFzaGJvYXJkLnYxLlN0cmVhbVB1bGxSZXF1ZXN0c1JlcXVlc3QaGS5kYXNoYm9hcmQudjEuUHVsbFJlcXVlc3QiADAB');

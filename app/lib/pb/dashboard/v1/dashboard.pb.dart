@@ -5,7 +5,6 @@
 // @dart = 2.12
 // ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
 
-import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
@@ -168,19 +167,5 @@ class PullRequest extends $pb.GeneratedMessage {
   $core.bool hasUrl() => $_has(1);
   @$pb.TagNumber(2)
   void clearUrl() => clearField(2);
-}
-
-class DashboardServiceApi {
-  $pb.RpcClient _client;
-  DashboardServiceApi(this._client);
-
-  $async.Future<ListPullRequestsResponse> listPullRequests($pb.ClientContext? ctx, ListPullRequestsRequest request) {
-    var emptyResponse = ListPullRequestsResponse();
-    return _client.invoke<ListPullRequestsResponse>(ctx, 'DashboardService', 'ListPullRequests', request, emptyResponse);
-  }
-  $async.Future<PullRequest> streamPullRequests($pb.ClientContext? ctx, StreamPullRequestsRequest request) {
-    var emptyResponse = PullRequest();
-    return _client.invoke<PullRequest>(ctx, 'DashboardService', 'StreamPullRequests', request, emptyResponse);
-  }
 }
 

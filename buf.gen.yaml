@@ -11,3 +11,4 @@ plugins:
     opt: paths=source_relative,lang=go
   - name: dart
     out: app/lib/pb
+    opt: grpc
