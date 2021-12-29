@@ -69,7 +69,10 @@ func run() error {
 	srv := grpc.NewServer()
 	dashboardv1.RegisterDashboardServiceServer(srv, api.NewGRPC(aggregator))
 	reflection.Register(srv)
-	wrapped := grpcweb.WrapServer(srv)
+	wrapped := grpcweb.WrapServer(
+		srv,
+		grpcweb.WithOriginFunc(func(origin string) bool { return true }),
+	)
 
 	httpServer := &http.Server{
 		// These interfere with websocket streams, disable for now
@@ -86,7 +89,7 @@ func run() error {
 			},
 		},
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if wrapped.IsGrpcWebRequest(r) {
+			if wrapped.IsGrpcWebRequest(r) || wrapped.IsAcceptableGrpcCorsRequest(r) || wrapped.IsGrpcWebSocketRequest(r) {
 				wrapped.ServeHTTP(w, r)
 				return
 			}
