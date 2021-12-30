@@ -64,16 +64,19 @@ type Service struct {
 	provider Provider
 }
 
-func (s Service) GetAllPRs(ctx context.Context) ([]PR, error) {
-	allPRs := make([]PR, 0, len(s.repos))
+func (s Service) GetAllPRs(ctx context.Context) ([]Repository, error) {
+	repos := make([]Repository, 0, len(s.repos))
 	for _, repo := range s.repos {
 		prs, err := s.provider.GetPRsForRepo(ctx, repo)
 		if err != nil {
 			return nil, err
 		}
 
-		allPRs = append(prs, prs...)
+		repos = append(repos, Repository{
+			Name:         repo,
+			PullRequests: prs,
+		})
 	}
 
-	return allPRs, nil
+	return repos, nil
 }

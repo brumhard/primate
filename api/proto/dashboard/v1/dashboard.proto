@@ -23,10 +23,16 @@ message ListPullRequestsRequest {}
 message StreamPullRequestsRequest {}
 
 message ListPullRequestsResponse {
-  repeated PullRequest items = 1;
+  repeated Repository items = 1;
+}
+
+message Repository {
+  string name = 1;
+  repeated PullRequest pullrequests = 2;
 }
 
 message PullRequest {
   string title = 1;
   string url = 2;
+  string user = 3;
 }

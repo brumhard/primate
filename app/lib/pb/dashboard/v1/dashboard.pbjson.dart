@@ -26,20 +26,32 @@ final $typed_data.Uint8List streamPullRequestsRequestDescriptor = $convert.base6
 const ListPullRequestsResponse$json = const {
   '1': 'ListPullRequestsResponse',
   '2': const [
-    const {'1': 'items', '3': 1, '4': 3, '5': 11, '6': '.dashboard.v1.PullRequest', '10': 'items'},
+    const {'1': 'items', '3': 1, '4': 3, '5': 11, '6': '.dashboard.v1.Repository', '10': 'items'},
   ],
 };
 
 /// Descriptor for `ListPullRequestsResponse`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List listPullRequestsResponseDescriptor = $convert.base64Decode('ChhMaXN0UHVsbFJlcXVlc3RzUmVzcG9uc2USLwoFaXRlbXMYASADKAsyGS5kYXNoYm9hcmQudjEuUHVsbFJlcXVlc3RSBWl0ZW1z');
+final $typed_data.Uint8List listPullRequestsResponseDescriptor = $convert.base64Decode('ChhMaXN0UHVsbFJlcXVlc3RzUmVzcG9uc2USLgoFaXRlbXMYASADKAsyGC5kYXNoYm9hcmQudjEuUmVwb3NpdG9yeVIFaXRlbXM=');
+@$core.Deprecated('Use repositoryDescriptor instead')
+const Repository$json = const {
+  '1': 'Repository',
+  '2': const [
+    const {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'pullrequests', '3': 2, '4': 3, '5': 11, '6': '.dashboard.v1.PullRequest', '10': 'pullrequests'},
+  ],
+};
+
+/// Descriptor for `Repository`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List repositoryDescriptor = $convert.base64Decode('CgpSZXBvc2l0b3J5EhIKBG5hbWUYASABKAlSBG5hbWUSPQoMcHVsbHJlcXVlc3RzGAIgAygLMhkuZGFzaGJvYXJkLnYxLlB1bGxSZXF1ZXN0UgxwdWxscmVxdWVzdHM=');
 @$core.Deprecated('Use pullRequestDescriptor instead')
 const PullRequest$json = const {
   '1': 'PullRequest',
   '2': const [
     const {'1': 'title', '3': 1, '4': 1, '5': 9, '10': 'title'},
     const {'1': 'url', '3': 2, '4': 1, '5': 9, '10': 'url'},
+    const {'1': 'user', '3': 3, '4': 1, '5': 9, '10': 'user'},
   ],
 };
 
 /// Descriptor for `PullRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pullRequestDescriptor = $convert.base64Decode('CgtQdWxsUmVxdWVzdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSEAoDdXJsGAIgASgJUgN1cmw=');
+final $typed_data.Uint8List pullRequestDescriptor = $convert.base64Decode('CgtQdWxsUmVxdWVzdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSEAoDdXJsGAIgASgJUgN1cmwSEgoEdXNlchgDIAEoCVIEdXNlcg==');

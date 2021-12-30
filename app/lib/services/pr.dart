@@ -15,9 +15,15 @@ class PrService {
     client = DashboardServiceClient(channel);
   }
 
-  Future<List<PR>> getAllPRs() async {
-    var prs = await client.listPullRequests(ListPullRequestsRequest());
-    return prs.items.map((pr) => PR(title: pr.title, url: pr.url)).toList();
+  Future<List<Repository>> getAllPRs() async {
+    var repos = await client.listPullRequests(ListPullRequestsRequest());
+    return repos.items
+        .map((repo) => Repository(
+            name: repo.name,
+            pullrequests: repo.pullrequests
+                .map((pr) => PR(title: pr.title, url: pr.url))
+                .toList()))
+        .toList();
   }
 }
 
@@ -26,4 +32,11 @@ class PR {
   String url;
 
   PR({required this.title, required this.url});
+}
+
+class Repository {
+  String name;
+  List<PR> pullrequests;
+
+  Repository({required this.name, required this.pullrequests});
 }

@@ -19,19 +19,28 @@ func NewGRPC(service *pr.Aggregator) *GRPC {
 }
 
 func (g *GRPC) ListPullRequests(ctx context.Context, request *dashboardv1.ListPullRequestsRequest) (*dashboardv1.ListPullRequestsResponse, error) {
-	prs, err := g.service.GetAllPRs(ctx)
+	repos, err := g.service.GetAllPRs(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	pullrequests := make([]*dashboardv1.PullRequest, 0, len(prs))
-	for _, pullrequest := range prs {
-		pullrequests = append(pullrequests, &dashboardv1.PullRequest{
-			Title: pullrequest.Title,
-			Url:   pullrequest.URL,
+	grpcRepos := make([]*dashboardv1.Repository, 0, len(repos))
+	for _, repo := range repos {
+		grpcPRs := make([]*dashboardv1.PullRequest, 0, len(repo.PullRequests))
+		for _, pullrequest := range repo.PullRequests {
+			grpcPRs = append(grpcPRs, &dashboardv1.PullRequest{
+				Title: pullrequest.Title,
+				Url:   pullrequest.URL,
+				User:  pullrequest.User,
+			})
+		}
+
+		grpcRepos = append(grpcRepos, &dashboardv1.Repository{
+			Name:         repo.Name,
+			Pullrequests: grpcPRs,
 		})
 	}
 	return &dashboardv1.ListPullRequestsResponse{
-		Items: pullrequests,
+		Items: grpcRepos,
 	}, nil
 }

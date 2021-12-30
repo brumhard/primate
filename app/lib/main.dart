@@ -1,5 +1,6 @@
 import 'package:app/services/pr.dart';
 import 'package:app/ui/pr_card.dart';
+import 'package:app/ui/repo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +43,7 @@ class Home extends StatelessWidget {
       body: Center(
         child: FutureBuilder(
           future: Provider.of<PrService>(context).getAllPRs(),
-          builder: (context, AsyncSnapshot<List<PR>> snapshot) {
+          builder: (context, AsyncSnapshot<List<Repository>> snapshot) {
             return Center(
               child: widgetsForSnapshotState(snapshot),
             );
@@ -53,7 +54,7 @@ class Home extends StatelessWidget {
   }
 }
 
-Widget widgetsForSnapshotState(AsyncSnapshot<List<PR>> snapshot) {
+Widget widgetsForSnapshotState(AsyncSnapshot<List<Repository>> snapshot) {
   if (snapshot.hasError) {
     return Column(children: [
       const Icon(
@@ -76,6 +77,10 @@ Widget widgetsForSnapshotState(AsyncSnapshot<List<PR>> snapshot) {
   }
 
   return ListView(
-    children: snapshot.data!.map((pr) => PRCard(pr: pr)).toList(),
+    children: snapshot.data!
+        .map((repo) => RepositoryCard(
+              repo: repo,
+            ))
+        .toList(),
   );
 }

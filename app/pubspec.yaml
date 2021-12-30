@@ -39,6 +39,7 @@ dependencies:
   async: ^2.8.2
   url_launcher: ^6.0.17
   provider: ^6.0.1
+  font_awesome_flutter: ^9.2.0
 
 dev_dependencies:
   flutter_test:

@@ -20,16 +20,16 @@ func NewAggregator(configs []ProviderConfiguration) (*Aggregator, error) {
 	return &Aggregator{services: services}, nil
 }
 
-func (a Aggregator) GetAllPRs(ctx context.Context) ([]PR, error) {
-	var allPRs []PR
+func (a Aggregator) GetAllPRs(ctx context.Context) ([]Repository, error) {
+	var allRepos []Repository
 	for _, svc := range a.services {
-		prs, err := svc.GetAllPRs(ctx)
+		repos, err := svc.GetAllPRs(ctx)
 		if err != nil {
 			return nil, err
 		}
 
-		allPRs = append(allPRs, prs...)
+		allRepos = append(allRepos, repos...)
 	}
 
-	return allPRs, nil
+	return allRepos, nil
 }

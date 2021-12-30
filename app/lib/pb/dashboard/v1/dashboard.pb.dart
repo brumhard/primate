@@ -69,13 +69,13 @@ class StreamPullRequestsRequest extends $pb.GeneratedMessage {
 
 class ListPullRequestsResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ListPullRequestsResponse', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dashboard.v1'), createEmptyInstance: create)
-    ..pc<PullRequest>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'items', $pb.PbFieldType.PM, subBuilder: PullRequest.create)
+    ..pc<Repository>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'items', $pb.PbFieldType.PM, subBuilder: Repository.create)
     ..hasRequiredFields = false
   ;
 
   ListPullRequestsResponse._() : super();
   factory ListPullRequestsResponse({
-    $core.Iterable<PullRequest>? items,
+    $core.Iterable<Repository>? items,
   }) {
     final _result = create();
     if (items != null) {
@@ -105,13 +105,69 @@ class ListPullRequestsResponse extends $pb.GeneratedMessage {
   static ListPullRequestsResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<PullRequest> get items => $_getList(0);
+  $core.List<Repository> get items => $_getList(0);
+}
+
+class Repository extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Repository', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dashboard.v1'), createEmptyInstance: create)
+    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
+    ..pc<PullRequest>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'pullrequests', $pb.PbFieldType.PM, subBuilder: PullRequest.create)
+    ..hasRequiredFields = false
+  ;
+
+  Repository._() : super();
+  factory Repository({
+    $core.String? name,
+    $core.Iterable<PullRequest>? pullrequests,
+  }) {
+    final _result = create();
+    if (name != null) {
+      _result.name = name;
+    }
+    if (pullrequests != null) {
+      _result.pullrequests.addAll(pullrequests);
+    }
+    return _result;
+  }
+  factory Repository.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Repository.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Repository clone() => Repository()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Repository copyWith(void Function(Repository) updates) => super.copyWith((message) => updates(message as Repository)) as Repository; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Repository create() => Repository._();
+  Repository createEmptyInstance() => create();
+  static $pb.PbList<Repository> createRepeated() => $pb.PbList<Repository>();
+  @$core.pragma('dart2js:noInline')
+  static Repository getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Repository>(create);
+  static Repository? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get name => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set name($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasName() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearName() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<PullRequest> get pullrequests => $_getList(1);
 }
 
 class PullRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'PullRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dashboard.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'title')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'url')
+    ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'user')
     ..hasRequiredFields = false
   ;
 
@@ -119,6 +175,7 @@ class PullRequest extends $pb.GeneratedMessage {
   factory PullRequest({
     $core.String? title,
     $core.String? url,
+    $core.String? user,
   }) {
     final _result = create();
     if (title != null) {
@@ -126,6 +183,9 @@ class PullRequest extends $pb.GeneratedMessage {
     }
     if (url != null) {
       _result.url = url;
+    }
+    if (user != null) {
+      _result.user = user;
     }
     return _result;
   }
@@ -167,5 +227,14 @@ class PullRequest extends $pb.GeneratedMessage {
   $core.bool hasUrl() => $_has(1);
   @$pb.TagNumber(2)
   void clearUrl() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get user => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set user($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasUser() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearUser() => clearField(3);
 }
 
