@@ -534,6 +534,14 @@ func (m *PullRequest) validate(all bool) error {
 
 	// no validation rules for User
 
+	// no validation rules for SourceBranch
+
+	// no validation rules for TargetBranch
+
+	// no validation rules for LastUpdatedAt
+
+	// no validation rules for Status
+
 	if len(errors) > 0 {
 		return PullRequestMultiError(errors)
 	}

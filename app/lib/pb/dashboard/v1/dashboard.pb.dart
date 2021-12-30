@@ -9,6 +9,10 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'dashboard.pbenum.dart';
+
+export 'dashboard.pbenum.dart';
+
 class ListPullRequestsRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ListPullRequestsRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dashboard.v1'), createEmptyInstance: create)
     ..hasRequiredFields = false
@@ -168,6 +172,10 @@ class PullRequest extends $pb.GeneratedMessage {
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'title')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'url')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'user')
+    ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sourceBranch')
+    ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'targetBranch')
+    ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'lastUpdatedAt')
+    ..e<PullRequest_Status>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: PullRequest_Status.STATUS_UNSPECIFIED, valueOf: PullRequest_Status.valueOf, enumValues: PullRequest_Status.values)
     ..hasRequiredFields = false
   ;
 
@@ -176,6 +184,10 @@ class PullRequest extends $pb.GeneratedMessage {
     $core.String? title,
     $core.String? url,
     $core.String? user,
+    $core.String? sourceBranch,
+    $core.String? targetBranch,
+    $core.String? lastUpdatedAt,
+    PullRequest_Status? status,
   }) {
     final _result = create();
     if (title != null) {
@@ -186,6 +198,18 @@ class PullRequest extends $pb.GeneratedMessage {
     }
     if (user != null) {
       _result.user = user;
+    }
+    if (sourceBranch != null) {
+      _result.sourceBranch = sourceBranch;
+    }
+    if (targetBranch != null) {
+      _result.targetBranch = targetBranch;
+    }
+    if (lastUpdatedAt != null) {
+      _result.lastUpdatedAt = lastUpdatedAt;
+    }
+    if (status != null) {
+      _result.status = status;
     }
     return _result;
   }
@@ -236,5 +260,41 @@ class PullRequest extends $pb.GeneratedMessage {
   $core.bool hasUser() => $_has(2);
   @$pb.TagNumber(3)
   void clearUser() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get sourceBranch => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set sourceBranch($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasSourceBranch() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSourceBranch() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get targetBranch => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set targetBranch($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasTargetBranch() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearTargetBranch() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get lastUpdatedAt => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set lastUpdatedAt($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasLastUpdatedAt() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearLastUpdatedAt() => clearField(6);
+
+  @$pb.TagNumber(7)
+  PullRequest_Status get status => $_getN(6);
+  @$pb.TagNumber(7)
+  set status(PullRequest_Status v) { setField(7, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasStatus() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearStatus() => clearField(7);
 }
 

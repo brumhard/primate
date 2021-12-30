@@ -32,7 +32,17 @@ message Repository {
 }
 
 message PullRequest {
+  enum Status {
+    STATUS_UNSPECIFIED = 0;
+    STATUS_DRAFT = 1;
+    STATUS_ACTIVE = 2;
+    STATUS_CLOSED = 3;
+  }
   string title = 1;
   string url = 2;
   string user = 3;
+  string source_branch = 4;
+  string target_branch = 5;
+  string last_updated_at = 6;
+  Status status = 7;
 }
