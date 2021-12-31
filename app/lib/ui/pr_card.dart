@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:app/services/pr.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:crypto/crypto.dart';
 
 class PRCard extends StatelessWidget {
   final PR pr;
@@ -9,6 +12,9 @@ class PRCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // hash user to not expose personal info
+    var userHash = sha1.convert(utf8.encode(pr.user));
+
     return Card(
       elevation: 2.0,
       child: Padding(
@@ -24,7 +30,7 @@ class PRCard extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: Colors.transparent,
                       backgroundImage: NetworkImage(
-                          "https://avatars.dicebear.com/api/pixel-art/${pr.user}.png"),
+                          "https://avatars.dicebear.com/api/pixel-art/$userHash.png"),
                     ),
                   ),
                   Flexible(
@@ -41,7 +47,7 @@ class PRCard extends StatelessWidget {
             ),
             IconButton(
               icon: const FaIcon(
-                FontAwesomeIcons.gitAlt,
+                FontAwesomeIcons.codeBranch,
               ),
               onPressed: () async {
                 if (!await canLaunch(pr.url)) {
