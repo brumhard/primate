@@ -396,6 +396,8 @@ func (m *Repository) validate(all bool) error {
 
 	// no validation rules for Name
 
+	// no validation rules for Url
+
 	for idx, item := range m.GetPullrequests() {
 		_, _ = idx, item
 

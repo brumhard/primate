@@ -37,12 +37,13 @@ const Repository$json = const {
   '1': 'Repository',
   '2': const [
     const {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
-    const {'1': 'pullrequests', '3': 2, '4': 3, '5': 11, '6': '.dashboard.v1.PullRequest', '10': 'pullrequests'},
+    const {'1': 'url', '3': 2, '4': 1, '5': 9, '10': 'url'},
+    const {'1': 'pullrequests', '3': 3, '4': 3, '5': 11, '6': '.dashboard.v1.PullRequest', '10': 'pullrequests'},
   ],
 };
 
 /// Descriptor for `Repository`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List repositoryDescriptor = $convert.base64Decode('CgpSZXBvc2l0b3J5EhIKBG5hbWUYASABKAlSBG5hbWUSPQoMcHVsbHJlcXVlc3RzGAIgAygLMhkuZGFzaGJvYXJkLnYxLlB1bGxSZXF1ZXN0UgxwdWxscmVxdWVzdHM=');
+final $typed_data.Uint8List repositoryDescriptor = $convert.base64Decode('CgpSZXBvc2l0b3J5EhIKBG5hbWUYASABKAlSBG5hbWUSEAoDdXJsGAIgASgJUgN1cmwSPQoMcHVsbHJlcXVlc3RzGAMgAygLMhkuZGFzaGJvYXJkLnYxLlB1bGxSZXF1ZXN0UgxwdWxscmVxdWVzdHM=');
 @$core.Deprecated('Use pullRequestDescriptor instead')
 const PullRequest$json = const {
   '1': 'PullRequest',

@@ -42,7 +42,7 @@ class Home extends StatelessWidget {
       ),
       body: Center(
         child: FutureBuilder(
-          future: Provider.of<PrService>(context).getAllPRs(),
+          future: Provider.of<PrService>(context, listen: false).getAllPRs(),
           builder: (context, AsyncSnapshot<List<Repository>> snapshot) {
             return Center(
               child: widgetsForSnapshotState(snapshot),

@@ -115,18 +115,23 @@ class ListPullRequestsResponse extends $pb.GeneratedMessage {
 class Repository extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Repository', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'dashboard.v1'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'name')
-    ..pc<PullRequest>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'pullrequests', $pb.PbFieldType.PM, subBuilder: PullRequest.create)
+    ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'url')
+    ..pc<PullRequest>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'pullrequests', $pb.PbFieldType.PM, subBuilder: PullRequest.create)
     ..hasRequiredFields = false
   ;
 
   Repository._() : super();
   factory Repository({
     $core.String? name,
+    $core.String? url,
     $core.Iterable<PullRequest>? pullrequests,
   }) {
     final _result = create();
     if (name != null) {
       _result.name = name;
+    }
+    if (url != null) {
+      _result.url = url;
     }
     if (pullrequests != null) {
       _result.pullrequests.addAll(pullrequests);
@@ -164,7 +169,16 @@ class Repository extends $pb.GeneratedMessage {
   void clearName() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.List<PullRequest> get pullrequests => $_getList(1);
+  $core.String get url => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set url($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasUrl() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearUrl() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<PullRequest> get pullrequests => $_getList(2);
 }
 
 class PullRequest extends $pb.GeneratedMessage {

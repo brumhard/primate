@@ -28,7 +28,8 @@ message ListPullRequestsResponse {
 
 message Repository {
   string name = 1;
-  repeated PullRequest pullrequests = 2;
+  string url = 2;
+  repeated PullRequest pullrequests = 3;
 }
 
 message PullRequest {
