@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:app/services/pr.dart';
 import 'package:app/ui/pr_card.dart';
 import 'package:flutter/material.dart';

@@ -16,7 +16,29 @@ class PRCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SelectableText(pr.title),
+            Flexible(
+              child: Row(
+                children: [
+                  Tooltip(
+                    message: pr.user,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: NetworkImage(
+                          "https://avatars.dicebear.com/api/pixel-art/${pr.user}.png"),
+                    ),
+                  ),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        pr.title,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             IconButton(
               icon: const FaIcon(
                 FontAwesomeIcons.gitAlt,
