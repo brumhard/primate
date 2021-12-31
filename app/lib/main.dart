@@ -41,7 +41,7 @@ class Home extends StatelessWidget {
       ),
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1000),
+          constraints: const BoxConstraints(maxWidth: 1200),
           child: FutureBuilder(
             future: Provider.of<PrService>(context, listen: false).getAllPRs(),
             builder: (context, AsyncSnapshot<List<Repository>> snapshot) {
