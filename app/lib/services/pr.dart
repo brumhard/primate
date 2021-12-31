@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/pb/dashboard/v1/dashboard.pbgrpc.dart';
 import 'package:grpc/grpc_or_grpcweb.dart';
 
@@ -16,27 +18,64 @@ class PrService {
   }
 
   Future<List<Repository>> getAllPRs() async {
-    var repos = await client.listPullRequests(ListPullRequestsRequest());
-    return repos.items
-        .map((repo) => Repository(
-            name: repo.name,
-            pullrequests: repo.pullrequests
-                .map((pr) => PR(title: pr.title, url: pr.url))
-                .toList()))
-        .toList();
+    return [
+      Repository(
+          name: "testing-repo",
+          url: "https://google.com",
+          pullrequests: [
+            PR(
+                title: "Test this awesome tool",
+                url: "https://google.com",
+                user: "Mr Pink",
+                sourceBranch: "feature/test",
+                targetBranch: "main",
+                created: DateTime.now(),
+                status: "open"),
+            PR(
+                title: "Add feature x to this insane tool",
+                url: "https://google.com",
+                user: "Big Baby",
+                sourceBranch: "feature/x",
+                targetBranch: "main",
+                created: DateTime.now().subtract(const Duration(hours: 3)),
+                status: "draft"),
+          ])
+    ];
+    // var repos = await client.listPullRequests(ListPullRequestsRequest());
+    // return repos.items
+    //     .map((repo) => Repository(
+    //         name: repo.name,
+    //         pullrequests: repo.pullrequests
+    //             .map((pr) => PR(title: pr.title, url: pr.url))
+    //             .toList()))
+    //     .toList();
   }
 }
 
 class PR {
   String title;
   String url;
+  String user;
+  String sourceBranch;
+  String targetBranch;
+  DateTime created;
+  String status;
 
-  PR({required this.title, required this.url});
+  PR(
+      {required this.title,
+      required this.url,
+      required this.user,
+      required this.sourceBranch,
+      required this.targetBranch,
+      required this.created,
+      required this.status});
 }
 
 class Repository {
   String name;
+  String url;
   List<PR> pullrequests;
 
-  Repository({required this.name, required this.pullrequests});
+  Repository(
+      {required this.name, required this.url, required this.pullrequests});
 }
