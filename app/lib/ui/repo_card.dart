@@ -2,6 +2,7 @@ import 'package:app/services/pr.dart';
 import 'package:app/ui/pr_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RepositoryCard extends StatelessWidget {
   final Repository repo;
@@ -28,7 +29,12 @@ class RepositoryCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline5),
                   ),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (!await canLaunch(repo.url)) {
+                          throw 'Could not launch ${repo.url}';
+                        }
+                        await launch(repo.url);
+                      },
                       icon: const FaIcon(FontAwesomeIcons.github))
                 ],
               ),
