@@ -1,5 +1,4 @@
 import 'package:app/services/pr.dart';
-import 'package:app/ui/pr_card.dart';
 import 'package:app/ui/repo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,13 +40,16 @@ class Home extends StatelessWidget {
         title: Text(title),
       ),
       body: Center(
-        child: FutureBuilder(
-          future: Provider.of<PrService>(context, listen: false).getAllPRs(),
-          builder: (context, AsyncSnapshot<List<Repository>> snapshot) {
-            return Center(
-              child: widgetsForSnapshotState(snapshot),
-            );
-          },
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: FutureBuilder(
+            future: Provider.of<PrService>(context, listen: false).getAllPRs(),
+            builder: (context, AsyncSnapshot<List<Repository>> snapshot) {
+              return Center(
+                child: widgetsForSnapshotState(snapshot),
+              );
+            },
+          ),
         ),
       ),
     );
