@@ -43,7 +43,7 @@ class RepositoryCard extends StatelessWidget {
                 .map((pr) => Row(
                       children: [
                         Flexible(flex: 1, child: Container()),
-                        Flexible(flex: 4, child: PRCard(pr: pr)),
+                        Flexible(flex: 5, child: PRCard(pr: pr)),
                       ],
                     ))
                 .toList()
