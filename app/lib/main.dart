@@ -1,5 +1,6 @@
 import 'package:app/services/pr.dart';
 import 'package:app/services/theme.dart';
+import 'package:app/ui/colors.dart';
 import 'package:app/ui/repo_card.dart';
 import 'package:app/ui/skeletons/skeleton_repo_card.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ThemeService()),
-        Provider<PrService>(create: (_) => PrService(endpoint: "localhost"))
+        ChangeNotifierProvider<ThemeService>(create: (_) => ThemeService()),
+        ChangeNotifierProvider<PrService>(
+            create: (_) => PrService(endpoint: "localhost"))
       ],
       child: Consumer<ThemeService>(
         builder: (context, themeService, child) {
@@ -47,7 +49,7 @@ class Home extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFFdd5e89), Color(0xFFf7bb97)],
+              colors: [pink, orange],
             ),
           ),
         ),
@@ -55,13 +57,12 @@ class Home extends StatelessWidget {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1200),
-          child: FutureBuilder(
-            future: Provider.of<PrService>(context, listen: false).getAllPRs(),
-            builder: (context, AsyncSnapshot<List<Repository>> snapshot) {
-              return Center(
-                child: widgetsForSnapshotState(snapshot),
-              );
-            },
+          child: Center(
+            child: Consumer<PrService>(
+              builder: (context, prService, child) {
+                return widgetsForPRs(prService);
+              },
+            ),
           ),
         ),
       ),
@@ -85,31 +86,32 @@ class Home extends StatelessWidget {
   }
 }
 
-Widget widgetsForSnapshotState(AsyncSnapshot<List<Repository>> snapshot) {
-  if (snapshot.hasError) {
-    // TODO: show snackbar instead
-    return Column(children: [
-      const Icon(
-        Icons.error_outline,
-        color: Colors.red,
-        size: 60,
-      ),
-      Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Text('Error: ${snapshot.error}'),
-      ),
-    ]);
-  }
-  if (!snapshot.hasData) {
+Widget widgetsForPRs(PrService prService) {
+  // TODO: errorHandling?
+  // if (snapshot.hasError) {
+  //   // TODO: show snackbar instead
+  //   return Column(children: [
+  //     const Icon(
+  //       Icons.error_outline,
+  //       color: Colors.red,
+  //       size: 60,
+  //     ),
+  //     Padding(
+  //       padding: const EdgeInsets.only(top: 16),
+  //       child: Text('Error: ${snapshot.error}'),
+  //     ),
+  //   ]);
+  // }
+  if (prService.isLoading) {
     return ListView(
       children: const [RepositoryCardSkeleton(), RepositoryCardSkeleton()],
     );
   }
 
-  snapshot.data!
-      .sort((a, b) => b.pullrequests.length.compareTo(a.pullrequests.length));
+  List<Repository> repos = prService.repos!;
+  repos.sort((a, b) => b.pullrequests.length.compareTo(a.pullrequests.length));
   return ListView(
-    children: snapshot.data!
+    children: repos
         .map((repo) => RepositoryCard(
               repo: repo,
             ))
