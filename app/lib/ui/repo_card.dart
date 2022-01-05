@@ -10,6 +10,8 @@ class RepositoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    repo.pullrequests.sort((a, b) => b.created.compareTo(a.created));
+
     return Opacity(
       opacity: repo.pullrequests.isNotEmpty ? 1 : 0.5,
       child: Card(

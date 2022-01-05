@@ -51,7 +51,7 @@ class PrService {
                 user: "Mr Pink",
                 sourceBranch: "feature/test",
                 targetBranch: "main",
-                created: DateTime.now(),
+                created: DateTime.now().subtract(const Duration(days: 5)),
                 status: "open"),
             PR(
                 title: "Add feature x to this insane tool",
@@ -67,7 +67,7 @@ class PrService {
                 user: "Big Baby",
                 sourceBranch: "feature/x",
                 targetBranch: "main",
-                created: DateTime.now().subtract(const Duration(hours: 3)),
+                created: DateTime.now().subtract(const Duration(days: 3)),
                 status: "closed"),
             PR(
                 title: "Add feature x to this insane tool",
@@ -75,7 +75,7 @@ class PrService {
                 user: "Big Baby",
                 sourceBranch: "feature/x",
                 targetBranch: "main",
-                created: DateTime.now().subtract(const Duration(hours: 3)),
+                created: DateTime.now().subtract(const Duration(days: 4)),
                 status: "approved"),
           ]),
     ];
