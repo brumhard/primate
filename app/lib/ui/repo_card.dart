@@ -1,6 +1,7 @@
 import 'package:app/services/pr.dart';
 import 'package:app/ui/pr_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,13 +35,18 @@ class RepositoryCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.headline5),
                     ),
                     IconButton(
-                        onPressed: () async {
-                          if (!await canLaunch(repo.url)) {
-                            throw 'Could not launch ${repo.url}';
-                          }
-                          await launch(repo.url);
-                        },
-                        icon: const FaIcon(FontAwesomeIcons.github))
+                      onPressed: () async {
+                        if (!await canLaunch(repo.url)) {
+                          throw 'Could not launch ${repo.url}';
+                        }
+                        await launch(repo.url);
+                      },
+                      icon: SvgPicture.network(
+                        iconForRepoUrl(repo.url),
+                        height: 30,
+                      ),
+                      iconSize: 30,
+                    ),
                   ],
                 ),
               ),
@@ -58,4 +64,14 @@ class RepositoryCard extends StatelessWidget {
       ),
     );
   }
+}
+
+String iconForRepoUrl(String url) {
+  if (url.contains("github.com")) {
+    return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/microsoft-azure-devops.svg";
+  }
+  if (url.contains("dev.azure.com")) {
+    return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/github.svg";
+  }
+  return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/git.svg";
 }
