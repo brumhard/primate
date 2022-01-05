@@ -1,5 +1,6 @@
 import 'package:app/services/pr.dart';
 import 'package:app/ui/repo_card.dart';
+import 'package:app/ui/skeletons/skeleton_repo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -67,6 +68,7 @@ class Home extends StatelessWidget {
 
 Widget widgetsForSnapshotState(AsyncSnapshot<List<Repository>> snapshot) {
   if (snapshot.hasError) {
+    // TODO: show snackbar instead
     return Column(children: [
       const Icon(
         Icons.error_outline,
@@ -80,10 +82,8 @@ Widget widgetsForSnapshotState(AsyncSnapshot<List<Repository>> snapshot) {
     ]);
   }
   if (!snapshot.hasData) {
-    return const SizedBox(
-      width: 60,
-      height: 60,
-      child: CircularProgressIndicator(),
+    return ListView(
+      children: const [RepositoryCardSkeleton(), RepositoryCardSkeleton()],
     );
   }
 
