@@ -14,10 +14,6 @@ class PRCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: use Link widget for correct context menu as soon as https://github.com/flutter/flutter/issues/91881 is closed
-
-    // hash user to not expose personal info
-    var userHash = sha1.convert(utf8.encode(pr.user));
-
     return InkWell(
       onTap: () async {
         if (!await canLaunch(pr.url)) {
@@ -31,104 +27,119 @@ class PRCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: MediaQuery.of(context).size.width < 400
-                ? [
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Flexible(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      pr.title,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      "${pr.sourceBranch} \u{2192} ${pr.targetBranch}",
-                                      overflow: TextOverflow.ellipsis,
-                                      style:
-                                          Theme.of(context).textTheme.overline,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ]
-                : [
-                    Tooltip(
-                      message: pr.user,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        backgroundImage: NetworkImage(
-                            "https://avatars.dicebear.com/api/pixel-art/$userHash.png"),
-                      ),
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Flexible(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      pr.title,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      "${pr.sourceBranch} \u{2192} ${pr.targetBranch}",
-                                      overflow: TextOverflow.ellipsis,
-                                      style:
-                                          Theme.of(context).textTheme.overline,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  DateFormat("dd MMM. yyyy").format(pr.created),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 10, right: 10),
-                                  child: FaIcon(
-                                    FontAwesomeIcons.codeBranch,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-          ),
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: cardContentForSize(context, pr)),
         ),
       ),
     );
   }
+}
+
+List<Widget> cardContentForSize(BuildContext context, PR pr) {
+  var userHash = sha1.convert(utf8.encode(pr.user));
+  if (MediaQuery.of(context).size.width < 400) {
+    return [
+      Tooltip(
+        message: pr.user,
+        child: CircleAvatar(
+          backgroundColor: Colors.transparent,
+          backgroundImage: NetworkImage(
+              "https://avatars.dicebear.com/api/pixel-art/$userHash.png"),
+        ),
+      ),
+      Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        pr.title,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "${pr.sourceBranch} \u{2192} ${pr.targetBranch}",
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.overline,
+                      ),
+                      Text(
+                        DateFormat("dd MMM. yyyy").format(pr.created),
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.overline,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      )
+    ];
+  }
+
+  return [
+    Tooltip(
+      message: pr.user,
+      child: CircleAvatar(
+        backgroundColor: Colors.transparent,
+        backgroundImage: NetworkImage(
+            "https://avatars.dicebear.com/api/pixel-art/$userHash.png"),
+      ),
+    ),
+    Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      pr.title,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "${pr.sourceBranch} \u{2192} ${pr.targetBranch}",
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.overline,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Text(
+                  DateFormat("dd MMM. yyyy").format(pr.created),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: FaIcon(
+                    FontAwesomeIcons.codeBranch,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  ];
 }
