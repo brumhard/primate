@@ -15,6 +15,7 @@ class RepositoryCard extends StatelessWidget {
       child: Card(
         color: const Color(0xffedf2f7),
         elevation: 2.0,
+        shadowColor: Colors.grey,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

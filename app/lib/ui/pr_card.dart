@@ -40,9 +40,7 @@ class _PRCardState extends State<PRCard> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 10),
           decoration: BoxDecoration(
-            boxShadow: const [
-              BoxShadow(color: Colors.grey, offset: Offset(3, 3), blurRadius: 3)
-            ],
+            boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 2)],
             borderRadius: BorderRadius.circular(4),
             color: _hovered ? null : Colors.white,
             gradient: _hovered
