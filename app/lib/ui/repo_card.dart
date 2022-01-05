@@ -50,14 +50,19 @@ class RepositoryCard extends StatelessWidget {
                   ],
                 ),
               ),
-              ...repo.pullrequests
-                  .map((pr) => Row(
-                        children: [
-                          Flexible(flex: 1, child: Container()),
-                          Flexible(flex: 5, child: PRCard(pr: pr)),
-                        ],
-                      ))
-                  .toList()
+              Row(
+                children: [
+                  Flexible(flex: 1, child: Container()),
+                  Flexible(
+                    flex: 5,
+                    child: Column(
+                      children: repo.pullrequests
+                          .map((pr) => PRCard(pr: pr))
+                          .toList(),
+                    ),
+                  )
+                ],
+              )
             ],
           ),
         ),

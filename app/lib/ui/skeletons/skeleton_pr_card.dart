@@ -45,40 +45,33 @@ List<Widget> cardContentForSize(BuildContext context) {
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Skeleton(
-                        width: 200,
-                        height:
-                            Theme.of(context).textTheme.headline6?.fontSize ??
-                                20,
-                      ),
-                      SizedBox(
-                        height:
-                            Theme.of(context).textTheme.overline?.fontSize ??
-                                15,
-                      ),
-                      Skeleton(
-                        width: 100,
-                        height:
-                            Theme.of(context).textTheme.overline?.fontSize ??
-                                15,
-                      ),
-                      SizedBox(
-                        height:
-                            Theme.of(context).textTheme.overline?.fontSize ??
-                                15,
-                      ),
-                      Skeleton(
-                        width: 120,
-                        height:
-                            Theme.of(context).textTheme.overline?.fontSize ??
-                                15,
-                      )
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Skeleton(
+                      width: 200,
+                      height:
+                          Theme.of(context).textTheme.headline6?.fontSize ?? 20,
+                    ),
+                    SizedBox(
+                      height:
+                          Theme.of(context).textTheme.overline?.fontSize ?? 15,
+                    ),
+                    Skeleton(
+                      width: 100,
+                      height:
+                          Theme.of(context).textTheme.overline?.fontSize ?? 15,
+                    ),
+                    SizedBox(
+                      height:
+                          Theme.of(context).textTheme.overline?.fontSize ?? 15,
+                    ),
+                    Skeleton(
+                      width: 120,
+                      height:
+                          Theme.of(context).textTheme.overline?.fontSize ?? 15,
+                    )
+                  ],
                 ),
               ),
             ),
@@ -104,26 +97,24 @@ List<Widget> cardContentForSize(BuildContext context) {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Skeleton(
-                      width: 200,
-                      height:
-                          Theme.of(context).textTheme.headline6?.fontSize ?? 20,
-                    ),
-                    SizedBox(
-                      height:
-                          Theme.of(context).textTheme.overline?.fontSize ?? 15,
-                    ),
-                    Skeleton(
-                      width: 120,
-                      height:
-                          Theme.of(context).textTheme.overline?.fontSize ?? 15,
-                    ),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Skeleton(
+                    width: 200,
+                    height:
+                        Theme.of(context).textTheme.headline6?.fontSize ?? 20,
+                  ),
+                  SizedBox(
+                    height:
+                        Theme.of(context).textTheme.overline?.fontSize ?? 15,
+                  ),
+                  Skeleton(
+                    width: 120,
+                    height:
+                        Theme.of(context).textTheme.overline?.fontSize ?? 15,
+                  ),
+                ],
               ),
             ),
           ),

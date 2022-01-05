@@ -87,29 +87,27 @@ List<Widget> cardContentForSize(BuildContext context, PR pr) {
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        pr.title,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "${pr.sourceBranch} \u{2192} ${pr.targetBranch}",
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.overline,
-                      ),
-                      Text(
-                        DateFormat("dd MMM. yyyy").format(pr.created) +
-                            " by " +
-                            pr.user,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.overline,
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      pr.title,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "${pr.sourceBranch} \u{2192} ${pr.targetBranch}",
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.overline,
+                    ),
+                    Text(
+                      DateFormat("dd MMM. yyyy").format(pr.created) +
+                          " by " +
+                          pr.user,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.overline,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -136,22 +134,20 @@ List<Widget> cardContentForSize(BuildContext context, PR pr) {
           Flexible(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      pr.title,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${pr.sourceBranch} \u{2192} ${pr.targetBranch}",
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.overline,
-                    ),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    pr.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "${pr.sourceBranch} \u{2192} ${pr.targetBranch}",
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.overline,
+                  ),
+                ],
               ),
             ),
           ),
