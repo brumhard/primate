@@ -38,6 +38,15 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFFdd5e89), Color(0xFFf7bb97)],
+            ),
+          ),
+        ),
       ),
       body: Center(
         child: ConstrainedBox(

@@ -7,28 +7,58 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:crypto/crypto.dart';
 
-class PRCard extends StatelessWidget {
+class PRCard extends StatefulWidget {
   final PR pr;
   const PRCard({Key? key, required this.pr}) : super(key: key);
+
+  @override
+  State<PRCard> createState() => _PRCardState();
+}
+
+class _PRCardState extends State<PRCard> {
+  bool _hovered = false;
 
   @override
   Widget build(BuildContext context) {
     // TODO: use Link widget for correct context menu as soon as https://github.com/flutter/flutter/issues/91881 is closed
     return InkWell(
+      radius: 3,
       onTap: () async {
-        if (!await canLaunch(pr.url)) {
-          throw 'Could not launch ${pr.url}';
+        if (!await canLaunch(widget.pr.url)) {
+          throw 'Could not launch ${widget.pr.url}';
         }
-        await launch(pr.url);
+        await launch(widget.pr.url);
+      },
+      onHover: (sth) {
+        setState(() {
+          _hovered = sth;
+        });
       },
       borderRadius: BorderRadius.circular(4),
-      child: Card(
-        elevation: 2.0,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: cardContentForSize(context, pr)),
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 10),
+          decoration: BoxDecoration(
+            boxShadow: const [
+              BoxShadow(color: Colors.grey, offset: Offset(3, 3), blurRadius: 3)
+            ],
+            borderRadius: BorderRadius.circular(4),
+            color: _hovered ? null : Colors.white,
+            gradient: _hovered
+                ? const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFFdd5e89), Color(0xFFf7bb97)],
+                  )
+                : null,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: cardContentForSize(context, widget.pr)),
+          ),
         ),
       ),
     );
