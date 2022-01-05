@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:app/services/pr.dart';
+import 'package:app/ui/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -29,25 +30,26 @@ class _PRCardState extends State<PRCard> {
         }
         await launch(widget.pr.url);
       },
-      onHover: (sth) {
+      onHover: (hovered) {
         setState(() {
-          _hovered = sth;
+          _hovered = hovered;
         });
       },
       borderRadius: BorderRadius.circular(4),
       child: Padding(
         padding: const EdgeInsets.all(4),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 10),
+        child: Container(
           decoration: BoxDecoration(
-            boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 2)],
+            boxShadow: [
+              BoxShadow(color: Theme.of(context).shadowColor, blurRadius: 2)
+            ],
             borderRadius: BorderRadius.circular(4),
-            color: _hovered ? null : Colors.white,
+            color: _hovered ? null : Theme.of(context).scaffoldBackgroundColor,
             gradient: _hovered
                 ? const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFFdd5e89), Color(0xFFf7bb97)],
+                    colors: [pink, orange],
                   )
                 : null,
           ),
@@ -71,7 +73,7 @@ List<Widget> cardContentForSize(BuildContext context, PR pr) {
         message: pr.status,
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black,
+          foregroundColor: Theme.of(context).iconTheme.color,
           child: FaIcon(
             iconForPRStatus(pr.status),
           ),
@@ -165,7 +167,7 @@ List<Widget> cardContentForSize(BuildContext context, PR pr) {
                   message: pr.status,
                   child: CircleAvatar(
                     backgroundColor: Colors.transparent,
-                    foregroundColor: Colors.black,
+                    foregroundColor: Theme.of(context).iconTheme.color,
                     child: FaIcon(
                       iconForPRStatus(pr.status),
                     ),

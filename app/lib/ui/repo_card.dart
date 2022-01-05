@@ -15,7 +15,7 @@ class RepositoryCard extends StatelessWidget {
     return Opacity(
       opacity: repo.pullrequests.isNotEmpty ? 1 : 0.5,
       child: Card(
-        color: const Color(0xffedf2f7),
+        color: Theme.of(context).dialogBackgroundColor,
         elevation: 2.0,
         shadowColor: Colors.grey,
         child: Padding(
@@ -42,6 +42,7 @@ class RepositoryCard extends StatelessWidget {
                       },
                       icon: SvgPicture.network(
                         iconForRepoUrl(repo.url),
+                        color: Theme.of(context).iconTheme.color,
                         height: 30,
                       ),
                       iconSize: 30,

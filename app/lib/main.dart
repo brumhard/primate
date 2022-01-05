@@ -1,4 +1,5 @@
 import 'package:app/services/pr.dart';
+import 'package:app/services/theme.dart';
 import 'package:app/ui/repo_card.dart';
 import 'package:app/ui/skeletons/skeleton_repo_card.dart';
 import 'package:flutter/material.dart';
@@ -14,19 +15,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'PullRequest Dashboard',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: MultiProvider(
-          providers: [
-            Provider<PrService>(
-              create: (context) => PrService(endpoint: "localhost"),
-            )
-          ],
-          child: const Home(title: 'PullRequest Dashboard'),
-        ));
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeService()),
+        Provider<PrService>(create: (_) => PrService(endpoint: "localhost"))
+      ],
+      child: Consumer<ThemeService>(
+        builder: (context, themeService, child) {
+          return MaterialApp(
+            title: 'PullRequest Dashboard',
+            theme: themeService.theme,
+            home: const Home(title: 'PullRequest Dashboard'),
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -61,6 +64,22 @@ class Home extends StatelessWidget {
             },
           ),
         ),
+      ),
+      floatingActionButton: Consumer<ThemeService>(
+        builder: (context, themeService, child) {
+          return FloatingActionButton(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            onPressed: () => {
+              themeService.setTheme(
+                  themeService.currentBrightness == Brightness.light
+                      ? Brightness.dark
+                      : Brightness.light)
+            },
+            child: Icon(themeService.currentBrightness == Brightness.light
+                ? Icons.nightlight_round
+                : Icons.wb_sunny),
+          );
+        },
       ),
     );
   }
