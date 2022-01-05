@@ -87,6 +87,8 @@ Widget widgetsForSnapshotState(AsyncSnapshot<List<Repository>> snapshot) {
     );
   }
 
+  snapshot.data!
+      .sort((a, b) => b.pullrequests.length.compareTo(a.pullrequests.length));
   return ListView(
     children: snapshot.data!
         .map((repo) => RepositoryCard(

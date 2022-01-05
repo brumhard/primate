@@ -10,44 +10,47 @@ class RepositoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: const Color(0xffedf2f7),
-      elevation: 2.0,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    child: Text(repo.name,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headline5),
-                  ),
-                  IconButton(
-                      onPressed: () async {
-                        if (!await canLaunch(repo.url)) {
-                          throw 'Could not launch ${repo.url}';
-                        }
-                        await launch(repo.url);
-                      },
-                      icon: const FaIcon(FontAwesomeIcons.github))
-                ],
+    return Opacity(
+      opacity: repo.pullrequests.isNotEmpty ? 1 : 0.5,
+      child: Card(
+        color: const Color(0xffedf2f7),
+        elevation: 2.0,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(repo.name,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.headline5),
+                    ),
+                    IconButton(
+                        onPressed: () async {
+                          if (!await canLaunch(repo.url)) {
+                            throw 'Could not launch ${repo.url}';
+                          }
+                          await launch(repo.url);
+                        },
+                        icon: const FaIcon(FontAwesomeIcons.github))
+                  ],
+                ),
               ),
-            ),
-            ...repo.pullrequests
-                .map((pr) => Row(
-                      children: [
-                        Flexible(flex: 1, child: Container()),
-                        Flexible(flex: 5, child: PRCard(pr: pr)),
-                      ],
-                    ))
-                .toList()
-          ],
+              ...repo.pullrequests
+                  .map((pr) => Row(
+                        children: [
+                          Flexible(flex: 1, child: Container()),
+                          Flexible(flex: 5, child: PRCard(pr: pr)),
+                        ],
+                      ))
+                  .toList()
+            ],
+          ),
         ),
       ),
     );

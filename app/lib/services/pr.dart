@@ -40,6 +40,7 @@ class PrService {
                 created: DateTime.now().subtract(const Duration(hours: 3)),
                 status: "draft"),
           ]),
+      Repository(name: "empty repo", url: "", pullrequests: []),
       Repository(
           name: "smd-tutorial",
           url: "https://google.com",
@@ -76,7 +77,7 @@ class PrService {
                 targetBranch: "main",
                 created: DateTime.now().subtract(const Duration(hours: 3)),
                 status: "approved"),
-          ])
+          ]),
     ];
     // var repos = await client.listPullRequests(ListPullRequestsRequest());
     // return repos.items
