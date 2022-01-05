@@ -21,7 +21,7 @@ class PRCard extends StatelessWidget {
         }
         await launch(pr.url);
       },
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(4),
       child: Card(
         elevation: 2.0,
         child: Padding(
@@ -37,14 +37,16 @@ class PRCard extends StatelessWidget {
 
 List<Widget> cardContentForSize(BuildContext context, PR pr) {
   var userHash = sha1.convert(utf8.encode(pr.user));
-  if (MediaQuery.of(context).size.width < 400) {
+  if (MediaQuery.of(context).orientation == Orientation.portrait) {
     return [
       Tooltip(
-        message: pr.user,
+        message: pr.status,
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
-          backgroundImage: NetworkImage(
-              "https://avatars.dicebear.com/api/pixel-art/$userHash.png"),
+          foregroundColor: Colors.black,
+          child: FaIcon(
+            iconForPRStatus(pr.status),
+          ),
         ),
       ),
       Expanded(
@@ -70,7 +72,9 @@ List<Widget> cardContentForSize(BuildContext context, PR pr) {
                         style: Theme.of(context).textTheme.overline,
                       ),
                       Text(
-                        DateFormat("dd MMM. yyyy").format(pr.created),
+                        DateFormat("dd MMM. yyyy").format(pr.created) +
+                            " by " +
+                            pr.user,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.overline,
                       ),
@@ -121,25 +125,42 @@ List<Widget> cardContentForSize(BuildContext context, PR pr) {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text(
-                  DateFormat("dd MMM. yyyy").format(pr.created),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  child: FaIcon(
-                    FontAwesomeIcons.codeBranch,
+          Row(
+            children: [
+              Text(
+                DateFormat("dd MMM. yyyy").format(pr.created),
+                overflow: TextOverflow.ellipsis,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: Tooltip(
+                  message: pr.status,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.black,
+                    child: FaIcon(
+                      iconForPRStatus(pr.status),
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
     ),
   ];
+}
+
+IconData iconForPRStatus(String status) {
+  switch (status) {
+    case "approved":
+      return FontAwesomeIcons.check;
+    case "closed":
+      return FontAwesomeIcons.times;
+    case "draft":
+      return FontAwesomeIcons.firstdraft;
+    default:
+      return FontAwesomeIcons.codeBranch;
+  }
 }

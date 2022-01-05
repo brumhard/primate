@@ -39,6 +39,43 @@ class PrService {
                 targetBranch: "main",
                 created: DateTime.now().subtract(const Duration(hours: 3)),
                 status: "draft"),
+          ]),
+      Repository(
+          name: "smd-tutorial",
+          url: "https://google.com",
+          pullrequests: [
+            PR(
+                title: "Test this awesome tool",
+                url: "https://google.com",
+                user: "Mr Pink",
+                sourceBranch: "feature/test",
+                targetBranch: "main",
+                created: DateTime.now(),
+                status: "open"),
+            PR(
+                title: "Add feature x to this insane tool",
+                url: "https://google.com",
+                user: "Big Baby",
+                sourceBranch: "feature/x",
+                targetBranch: "main",
+                created: DateTime.now().subtract(const Duration(hours: 3)),
+                status: "draft"),
+            PR(
+                title: "Add feature x to this insane tool",
+                url: "https://google.com",
+                user: "Big Baby",
+                sourceBranch: "feature/x",
+                targetBranch: "main",
+                created: DateTime.now().subtract(const Duration(hours: 3)),
+                status: "closed"),
+            PR(
+                title: "Add feature x to this insane tool",
+                url: "https://google.com",
+                user: "Big Baby",
+                sourceBranch: "feature/x",
+                targetBranch: "main",
+                created: DateTime.now().subtract(const Duration(hours: 3)),
+                status: "approved"),
           ])
     ];
     // var repos = await client.listPullRequests(ListPullRequestsRequest());
