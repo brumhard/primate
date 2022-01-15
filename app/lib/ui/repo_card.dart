@@ -36,7 +36,11 @@ class RepositoryCard extends StatelessWidget {
                     IconButton(
                       onPressed: () async {
                         if (!await canLaunch(repo.url)) {
-                          throw 'Could not launch ${repo.url}';
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              content: Text("Invalid URL: \"${repo.url}\"")));
+                          return;
                         }
                         await launch(repo.url);
                       },
@@ -73,10 +77,10 @@ class RepositoryCard extends StatelessWidget {
 
 String iconForRepoUrl(String url) {
   if (url.contains("github.com")) {
-    return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/microsoft-azure-devops.svg";
+    return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/github.svg";
   }
   if (url.contains("dev.azure.com")) {
-    return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/github.svg";
+    return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/microsoft-azure-devops.svg";
   }
   return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/git.svg";
 }

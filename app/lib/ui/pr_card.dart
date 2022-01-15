@@ -26,7 +26,10 @@ class _PRCardState extends State<PRCard> {
       radius: 3,
       onTap: () async {
         if (!await canLaunch(widget.pr.url)) {
-          throw 'Could not launch ${widget.pr.url}';
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              content: Text("Invalid URL: \"${widget.pr.url}\"")));
+          return;
         }
         await launch(widget.pr.url);
       },
