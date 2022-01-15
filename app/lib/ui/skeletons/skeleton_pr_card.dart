@@ -12,9 +12,11 @@ class PRCardSkeleton extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 10),
         decoration: BoxDecoration(
-          boxShadow: const [BoxShadow(color: Colors.grey, blurRadius: 2)],
+          boxShadow: [
+            BoxShadow(color: Theme.of(context).shadowColor, blurRadius: 2)
+          ],
           borderRadius: BorderRadius.circular(4),
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),

@@ -8,9 +8,9 @@ class RepositoryCardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: const Color(0xffedf2f7),
+      color: Theme.of(context).dialogBackgroundColor,
       elevation: 2.0,
-      shadowColor: Colors.grey,
+      shadowColor: Theme.of(context).shadowColor,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
