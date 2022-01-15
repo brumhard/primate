@@ -19,18 +19,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ThemeService>(create: (_) => ThemeService()),
-        StreamProvider<List<Repository>?>(
-          initialData: null,
-          create: (_) => PrService(endpoint: "localhost").stream,
-          catchError: (context, error) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(error.toString()),
-                backgroundColor: Theme.of(context).colorScheme.primary,
-              ),
-            );
-          },
-        )
+        Provider<PrService>(create: (_) => PrService(endpoint: "localhost")),
       ],
       child: Consumer<ThemeService>(
         builder: (context, themeService, child) {
@@ -53,7 +42,17 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+                onPressed: () =>
+                    Provider.of<PrService>(context, listen: false).loadPRs(),
+                icon: const Icon(Icons.replay)),
+            Text(title),
+            Container()
+          ],
+        ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -68,9 +67,20 @@ class Home extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1200),
           child: Center(
-            child: Consumer<List<Repository>?>(
-              builder: (context, repos, _) {
-                if (repos == null) {
+            child: StreamBuilder<List<Repository>?>(
+              initialData: null,
+              stream: Provider.of<PrService>(context, listen: false).stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(snapshot.error.toString()),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                  );
+                }
+
+                if (!snapshot.hasData) {
                   return ListView(
                     children: const [
                       RepositoryCardSkeleton(),
@@ -79,6 +89,7 @@ class Home extends StatelessWidget {
                   );
                 }
 
+                List<Repository> repos = snapshot.data!;
                 repos.sort((a, b) =>
                     b.pullrequests.length.compareTo(a.pullrequests.length));
                 return ListView(
