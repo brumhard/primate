@@ -19,8 +19,18 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ThemeService>(create: (_) => ThemeService()),
-        ChangeNotifierProvider<PrService>(
-            create: (_) => PrService(endpoint: "localhost"))
+        StreamProvider<List<Repository>?>(
+          initialData: null,
+          create: (_) => PrService(endpoint: "localhost").stream,
+          catchError: (context, error) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(error.toString()),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+              ),
+            );
+          },
+        )
       ],
       child: Consumer<ThemeService>(
         builder: (context, themeService, child) {
@@ -58,9 +68,26 @@ class Home extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1200),
           child: Center(
-            child: Consumer<PrService>(
-              builder: (context, prService, child) {
-                return widgetsForPRs(prService);
+            child: Consumer<List<Repository>?>(
+              builder: (context, repos, _) {
+                if (repos == null) {
+                  return ListView(
+                    children: const [
+                      RepositoryCardSkeleton(),
+                      RepositoryCardSkeleton()
+                    ],
+                  );
+                }
+
+                repos.sort((a, b) =>
+                    b.pullrequests.length.compareTo(a.pullrequests.length));
+                return ListView(
+                  children: repos
+                      .map((repo) => RepositoryCard(
+                            repo: repo,
+                          ))
+                      .toList(),
+                );
               },
             ),
           ),
@@ -84,37 +111,4 @@ class Home extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget widgetsForPRs(PrService prService) {
-  // TODO: errorHandling?
-  // if (snapshot.hasError) {
-  //   // TODO: show snackbar instead
-  //   return Column(children: [
-  //     const Icon(
-  //       Icons.error_outline,
-  //       color: Colors.red,
-  //       size: 60,
-  //     ),
-  //     Padding(
-  //       padding: const EdgeInsets.only(top: 16),
-  //       child: Text('Error: ${snapshot.error}'),
-  //     ),
-  //   ]);
-  // }
-  if (prService.isLoading) {
-    return ListView(
-      children: const [RepositoryCardSkeleton(), RepositoryCardSkeleton()],
-    );
-  }
-
-  List<Repository> repos = prService.repos!;
-  repos.sort((a, b) => b.pullrequests.length.compareTo(a.pullrequests.length));
-  return ListView(
-    children: repos
-        .map((repo) => RepositoryCard(
-              repo: repo,
-            ))
-        .toList(),
-  );
 }

@@ -1,13 +1,14 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:app/pb/dashboard/v1/dashboard.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc_or_grpcweb.dart';
 
 // TODO: reload on pull down/ reload button
-class PrService extends ChangeNotifier {
+class PrService {
   late DashboardServiceClient client;
-
-  bool _loading = true;
-  List<Repository>? _repos;
+  final StreamController<List<Repository>?> _controller = StreamController();
 
   PrService({required endpoint}) {
     GrpcOrGrpcWebClientChannel channel =
@@ -18,15 +19,17 @@ class PrService extends ChangeNotifier {
             grpcWebPort: 8080,
             grpcWebTransportSecure: false);
     client = DashboardServiceClient(channel);
-    loadPRs();
+
+    _controller.onListen = () => loadPRs();
   }
 
-  bool get isLoading => _loading;
-  List<Repository>? get repos => _repos;
+  Stream<List<Repository>?> get stream => _controller.stream;
 
   void loadPRs() async {
-    _loading = true;
-    _repos = [
+    // set loading state
+    _controller.add(null);
+
+    var repos = [
       Repository(
           name: "testing-repo",
           url: "https://google.com",
@@ -93,8 +96,7 @@ class PrService extends ChangeNotifier {
     //             .map((pr) => PR(title: pr.title, url: pr.url))
     //             .toList()))
     //     .toList();
-    _loading = false;
-    notifyListeners();
+    Future.delayed(Duration(seconds: 5), () => _controller.add(repos));
   }
 }
 
