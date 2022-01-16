@@ -44,7 +44,7 @@ type Config struct {
 }
 
 func run() error {
-	cfgLoader := alligotor.New(alligotor.NewFilesSource("./configs/config.yaml"))
+	cfgLoader := alligotor.New(alligotor.NewFilesSource("./configs/config.yaml", "/Users/brumhard/repos/personal/pr-dashboard/configs/config.yaml"))
 	config := Config{
 		LogLevel:    zapcore.InfoLevel,
 		GRPCWebAddr: ":8080",

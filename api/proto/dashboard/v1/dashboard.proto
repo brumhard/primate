@@ -44,6 +44,6 @@ message PullRequest {
   string user = 3;
   string source_branch = 4;
   string target_branch = 5;
-  string last_updated_at = 6;
+  string created_at = 6;
   Status status = 7;
 }

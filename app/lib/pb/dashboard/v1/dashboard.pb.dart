@@ -188,7 +188,7 @@ class PullRequest extends $pb.GeneratedMessage {
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'user')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'sourceBranch')
     ..aOS(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'targetBranch')
-    ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'lastUpdatedAt')
+    ..aOS(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'createdAt')
     ..e<PullRequest_Status>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: PullRequest_Status.STATUS_UNSPECIFIED, valueOf: PullRequest_Status.valueOf, enumValues: PullRequest_Status.values)
     ..hasRequiredFields = false
   ;
@@ -200,7 +200,7 @@ class PullRequest extends $pb.GeneratedMessage {
     $core.String? user,
     $core.String? sourceBranch,
     $core.String? targetBranch,
-    $core.String? lastUpdatedAt,
+    $core.String? createdAt,
     PullRequest_Status? status,
   }) {
     final _result = create();
@@ -219,8 +219,8 @@ class PullRequest extends $pb.GeneratedMessage {
     if (targetBranch != null) {
       _result.targetBranch = targetBranch;
     }
-    if (lastUpdatedAt != null) {
-      _result.lastUpdatedAt = lastUpdatedAt;
+    if (createdAt != null) {
+      _result.createdAt = createdAt;
     }
     if (status != null) {
       _result.status = status;
@@ -294,13 +294,13 @@ class PullRequest extends $pb.GeneratedMessage {
   void clearTargetBranch() => clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get lastUpdatedAt => $_getSZ(5);
+  $core.String get createdAt => $_getSZ(5);
   @$pb.TagNumber(6)
-  set lastUpdatedAt($core.String v) { $_setString(5, v); }
+  set createdAt($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasLastUpdatedAt() => $_has(5);
+  $core.bool hasCreatedAt() => $_has(5);
   @$pb.TagNumber(6)
-  void clearLastUpdatedAt() => clearField(6);
+  void clearCreatedAt() => clearField(6);
 
   @$pb.TagNumber(7)
   PullRequest_Status get status => $_getN(6);

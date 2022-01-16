@@ -53,7 +53,7 @@ const PullRequest$json = const {
     const {'1': 'user', '3': 3, '4': 1, '5': 9, '10': 'user'},
     const {'1': 'source_branch', '3': 4, '4': 1, '5': 9, '10': 'sourceBranch'},
     const {'1': 'target_branch', '3': 5, '4': 1, '5': 9, '10': 'targetBranch'},
-    const {'1': 'last_updated_at', '3': 6, '4': 1, '5': 9, '10': 'lastUpdatedAt'},
+    const {'1': 'created_at', '3': 6, '4': 1, '5': 9, '10': 'createdAt'},
     const {'1': 'status', '3': 7, '4': 1, '5': 14, '6': '.dashboard.v1.PullRequest.Status', '10': 'status'},
   ],
   '4': const [PullRequest_Status$json],
@@ -71,4 +71,4 @@ const PullRequest_Status$json = const {
 };
 
 /// Descriptor for `PullRequest`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List pullRequestDescriptor = $convert.base64Decode('CgtQdWxsUmVxdWVzdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSEAoDdXJsGAIgASgJUgN1cmwSEgoEdXNlchgDIAEoCVIEdXNlchIjCg1zb3VyY2VfYnJhbmNoGAQgASgJUgxzb3VyY2VCcmFuY2gSIwoNdGFyZ2V0X2JyYW5jaBgFIAEoCVIMdGFyZ2V0QnJhbmNoEiYKD2xhc3RfdXBkYXRlZF9hdBgGIAEoCVINbGFzdFVwZGF0ZWRBdBI4CgZzdGF0dXMYByABKA4yIC5kYXNoYm9hcmQudjEuUHVsbFJlcXVlc3QuU3RhdHVzUgZzdGF0dXMiWAoGU3RhdHVzEhYKElNUQVRVU19VTlNQRUNJRklFRBAAEhAKDFNUQVRVU19EUkFGVBABEhEKDVNUQVRVU19BQ1RJVkUQAhIRCg1TVEFUVVNfQ0xPU0VEEAM=');
+final $typed_data.Uint8List pullRequestDescriptor = $convert.base64Decode('CgtQdWxsUmVxdWVzdBIUCgV0aXRsZRgBIAEoCVIFdGl0bGUSEAoDdXJsGAIgASgJUgN1cmwSEgoEdXNlchgDIAEoCVIEdXNlchIjCg1zb3VyY2VfYnJhbmNoGAQgASgJUgxzb3VyY2VCcmFuY2gSIwoNdGFyZ2V0X2JyYW5jaBgFIAEoCVIMdGFyZ2V0QnJhbmNoEh0KCmNyZWF0ZWRfYXQYBiABKAlSCWNyZWF0ZWRBdBI4CgZzdGF0dXMYByABKA4yIC5kYXNoYm9hcmQudjEuUHVsbFJlcXVlc3QuU3RhdHVzUgZzdGF0dXMiWAoGU3RhdHVzEhYKElNUQVRVU19VTlNQRUNJRklFRBAAEhAKDFNUQVRVU19EUkFGVBABEhEKDVNUQVRVU19BQ1RJVkUQAhIRCg1TVEFUVVNfQ0xPU0VEEAM=');

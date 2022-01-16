@@ -540,7 +540,7 @@ func (m *PullRequest) validate(all bool) error {
 
 	// no validation rules for TargetBranch
 
-	// no validation rules for LastUpdatedAt
+	// no validation rules for CreatedAt
 
 	// no validation rules for Status
 
