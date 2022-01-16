@@ -1,14 +1,13 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:app/pb/dashboard/v1/dashboard.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc_or_grpcweb.dart';
 
-// TODO: reload on pull down/ reload button
 class PrService {
   late DashboardServiceClient client;
   final StreamController<List<Repository>?> _controller = StreamController();
+  final ValueNotifier<bool> _isLoading = ValueNotifier(false);
 
   PrService({required endpoint}) {
     GrpcOrGrpcWebClientChannel channel =
@@ -24,10 +23,11 @@ class PrService {
   }
 
   Stream<List<Repository>?> get stream => _controller.stream;
+  ValueNotifier<bool> get isLoading => _isLoading;
 
   void loadPRs() async {
     // set loading state
-    _controller.add(null);
+    _isLoading.value = true;
 
     var repos = [
       Repository(
@@ -96,7 +96,10 @@ class PrService {
     //             .map((pr) => PR(title: pr.title, url: pr.url))
     //             .toList()))
     //     .toList();
-    Future.delayed(Duration(seconds: 5), () => _controller.add(repos));
+    Future.delayed(Duration(seconds: 5), () {
+      _controller.add(repos);
+      _isLoading.value = false;
+    });
   }
 }
 

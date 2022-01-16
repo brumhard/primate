@@ -1,6 +1,7 @@
 import 'package:app/services/pr.dart';
 import 'package:app/services/theme.dart';
 import 'package:app/ui/colors.dart';
+import 'package:app/ui/loader_icon.dart';
 import 'package:app/ui/repo_card.dart';
 import 'package:app/ui/skeletons/skeleton_repo_card.dart';
 import 'package:flutter/material.dart';
@@ -40,15 +41,22 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PrService prService = Provider.of<PrService>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-                onPressed: () =>
-                    Provider.of<PrService>(context, listen: false).loadPRs(),
-                icon: const Icon(Icons.replay)),
+            AnimatedBuilder(
+              animation: prService.isLoading,
+              builder: (context, child) {
+                return IconButton(
+                  onPressed: () => prService.loadPRs(),
+                  icon: LoaderIcon(isLoading: prService.isLoading.value),
+                );
+              },
+            ),
             Text(title),
             Container()
           ],
@@ -69,7 +77,7 @@ class Home extends StatelessWidget {
           child: Center(
             child: StreamBuilder<List<Repository>?>(
               initialData: null,
-              stream: Provider.of<PrService>(context, listen: false).stream,
+              stream: prService.stream,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   ScaffoldMessenger.of(context).showSnackBar(
