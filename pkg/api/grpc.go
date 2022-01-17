@@ -42,6 +42,7 @@ func (g *GRPC) ListPullRequests(ctx context.Context, request *dashboardv1.ListPu
 
 		grpcRepos = append(grpcRepos, &dashboardv1.Repository{
 			Name:         repo.Name,
+			Url:          repo.URL,
 			Pullrequests: grpcPRs,
 		})
 	}

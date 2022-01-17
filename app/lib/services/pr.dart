@@ -29,77 +29,100 @@ class PrService {
     // set loading state
     _isLoading.value = true;
 
-    var repos = [
-      Repository(
-          name: "testing-repo",
-          url: "https://google.com",
-          pullrequests: [
-            PR(
-                title: "Test this awesome tool",
-                url: "https://google.com",
-                user: "Mr Pink",
-                sourceBranch: "feature/test",
-                targetBranch: "main",
-                created: DateTime.now(),
-                status: "open"),
-            PR(
-                title: "Add feature x to this insane tool",
-                url: "https://google.com",
-                user: "Big Baby",
-                sourceBranch: "feature/x",
-                targetBranch: "main",
-                created: DateTime.now().subtract(const Duration(hours: 3)),
-                status: "draft"),
-          ]),
-      Repository(
-          name: "empty repo", url: "dev.azure.com/awa", pullrequests: []),
-      Repository(name: "smd-tutorial", url: "github.com/awdawd", pullrequests: [
-        PR(
-            title: "Test this awesome tool",
-            url: "github.com/awdawd",
-            user: "Mr Pink",
-            sourceBranch: "feature/test",
-            targetBranch: "main",
-            created: DateTime.now().subtract(const Duration(days: 5)),
-            status: "open"),
-        PR(
-            title: "Add feature x to this insane tool",
-            url: "dev.azure.com/awa",
-            user: "Big Baby",
-            sourceBranch: "feature/x",
-            targetBranch: "main",
-            created: DateTime.now().subtract(const Duration(hours: 3)),
-            status: "draft"),
-        PR(
-            title: "Add feature x to this insane tool",
-            url: "https://google.com",
-            user: "Big Baby",
-            sourceBranch: "feature/x",
-            targetBranch: "main",
-            created: DateTime.now().subtract(const Duration(days: 3)),
-            status: "closed"),
-        PR(
-            title: "Add feature x to this insane tool",
-            url: "https://google.com",
-            user: "Big Baby",
-            sourceBranch: "feature/x",
-            targetBranch: "main",
-            created: DateTime.now().subtract(const Duration(days: 4)),
-            status: "approved"),
-      ]),
-    ];
-    // var repos = await client.listPullRequests(ListPullRequestsRequest());
-    // return repos.items
-    //     .map((repo) => Repository(
-    //         name: repo.name,
-    //         pullrequests: repo.pullrequests
-    //             .map((pr) => PR(title: pr.title, url: pr.url))
-    //             .toList()))
-    //     .toList();
-    Future.delayed(Duration(seconds: 5), () {
-      _controller.add(repos);
-      _isLoading.value = false;
-    });
+    // var repos = [
+    //   Repository(
+    //       name: "testing-repo",
+    //       url: "https://google.com",
+    //       pullrequests: [
+    //         PR(
+    //             title: "Test this awesome tool",
+    //             url: "https://google.com",
+    //             user: "Mr Pink",
+    //             sourceBranch: "feature/test",
+    //             targetBranch: "main",
+    //             created: DateTime.now(),
+    //             status: "open"),
+    //         PR(
+    //             title: "Add feature x to this insane tool",
+    //             url: "https://google.com",
+    //             user: "Big Baby",
+    //             sourceBranch: "feature/x",
+    //             targetBranch: "main",
+    //             created: DateTime.now().subtract(const Duration(hours: 3)),
+    //             status: "draft"),
+    //       ]),
+    //   Repository(
+    //       name: "empty repo", url: "dev.azure.com/awa", pullrequests: []),
+    //   Repository(name: "smd-tutorial", url: "github.com/awdawd", pullrequests: [
+    //     PR(
+    //         title: "Test this awesome tool",
+    //         url: "github.com/awdawd",
+    //         user: "Mr Pink",
+    //         sourceBranch: "feature/test",
+    //         targetBranch: "main",
+    //         created: DateTime.now().subtract(const Duration(days: 5)),
+    //         status: "open"),
+    //     PR(
+    //         title: "Add feature x to this insane tool",
+    //         url: "dev.azure.com/awa",
+    //         user: "Big Baby",
+    //         sourceBranch: "feature/x",
+    //         targetBranch: "main",
+    //         created: DateTime.now().subtract(const Duration(hours: 3)),
+    //         status: "draft"),
+    //     PR(
+    //         title: "Add feature x to this insane tool",
+    //         url: "https://google.com",
+    //         user: "Big Baby",
+    //         sourceBranch: "feature/x",
+    //         targetBranch: "main",
+    //         created: DateTime.now().subtract(const Duration(days: 3)),
+    //         status: "closed"),
+    //     PR(
+    //         title: "Add feature x to this insane tool",
+    //         url: "https://google.com",
+    //         user: "Big Baby",
+    //         sourceBranch: "feature/x",
+    //         targetBranch: "main",
+    //         created: DateTime.now().subtract(const Duration(days: 4)),
+    //         status: "approved"),
+    //   ]),
+    // ];
+    var reposResponse =
+        await client.listPullRequests(ListPullRequestsRequest());
+    var repos = reposResponse.items
+        .map((repo) => Repository(
+            name: repo.name,
+            url: repo.url,
+            pullrequests: repo.pullrequests
+                .map((pr) => PR(
+                      title: pr.title,
+                      url: pr.url,
+                      user: pr.user,
+                      sourceBranch: pr.sourceBranch,
+                      targetBranch: pr.targetBranch,
+                      created: DateTime.parse(pr.createdAt),
+                      status: _prStatusToName(pr.status),
+                    ))
+                .toList()))
+        .toList();
+    // Future.delayed(Duration(seconds: 5), () {
+    _controller.add(repos);
+    _isLoading.value = false;
+    // });
+  }
+}
+
+String _prStatusToName(PullRequest_Status status) {
+  switch (status) {
+    case PullRequest_Status.STATUS_ACTIVE:
+      return "active";
+    case PullRequest_Status.STATUS_DRAFT:
+      return "draft";
+    case PullRequest_Status.STATUS_CLOSED:
+      return "closed";
+    default:
+      return "unspecified";
   }
 }
 

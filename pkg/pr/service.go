@@ -70,6 +70,7 @@ func providerForType(providerType ProviderType, cfg map[string]interface{}) (Pro
 	return nil, errors.Wrap(ErrUnknownProvider, string(providerType))
 }
 
+// TODO: include functionality to include repo url in response
 func (s SingleProviderService) GetAllPRs(ctx context.Context) ([]Repository, error) {
 	repos := make([]Repository, 0, len(s.repos))
 	for _, repo := range s.repos {
