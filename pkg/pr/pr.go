@@ -12,9 +12,9 @@ type PRStatus int
 
 const (
 	PRStatusUnspecified PRStatus = iota
-	PrStatusDraft
-	PrStatusActive
-	PrStatusClosed
+	PRStatusDraft
+	PRStatusActive
+	PRStatusClosed
 )
 
 type PR struct {

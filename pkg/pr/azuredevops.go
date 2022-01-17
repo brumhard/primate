@@ -58,15 +58,41 @@ func (ad AzureDevops) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, e
 		return nil, err
 	}
 
+	refPrefix := "refs/heads/"
+
 	prs := make([]PR, 0, len(*pullrequests))
 	for _, pullrequest := range *pullrequests {
 		prs = append(prs, PR{
-			Title: *pullrequest.Title,
-			URL:   webURLFromPR(pullrequest),
+			Title:        *pullrequest.Title,
+			URL:          webURLFromPR(pullrequest),
+			User:         *pullrequest.CreatedBy.DisplayName,
+			SourceBranch: strings.TrimPrefix(*pullrequest.SourceRefName, refPrefix),
+			TargetBranch: strings.TrimPrefix(*pullrequest.TargetRefName, refPrefix),
+			CreatedAt:    pullrequest.CreationDate.Time,
+			Status:       ad.statusForPR(pullrequest),
 		})
 	}
 
 	return prs, nil
+}
+
+func (ad AzureDevops) statusForPR(pr git.GitPullRequest) PRStatus {
+	if pr.IsDraft != nil && *pr.IsDraft {
+		return PRStatusDraft
+	}
+
+	if pr.Status == nil {
+		return PRStatusUnspecified
+	}
+
+	switch *pr.Status {
+	case "active":
+		return PRStatusActive
+	case "completed":
+		return PRStatusClosed
+	default:
+		return PRStatusUnspecified
+	}
 }
 
 func webURLFromPR(pullrequest git.GitPullRequest) string {

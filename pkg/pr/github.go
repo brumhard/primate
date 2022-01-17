@@ -58,10 +58,30 @@ func (g GitHub) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) 
 	prs := make([]PR, 0, len(pullrequests))
 	for _, pullrequest := range pullrequests {
 		prs = append(prs, PR{
-			Title: pullrequest.GetTitle(),
-			URL:   pullrequest.GetHTMLURL(),
+			Title:        pullrequest.GetTitle(),
+			URL:          pullrequest.GetHTMLURL(),
+			User:         pullrequest.GetUser().GetLogin(),
+			SourceBranch: pullrequest.GetHead().GetRef(),
+			TargetBranch: pullrequest.GetBase().GetRef(),
+			CreatedAt:    pullrequest.GetCreatedAt(),
+			Status:       g.statusForPR(pullrequest),
 		})
 	}
 
 	return prs, nil
+}
+
+func (g GitHub) statusForPR(pr *github.PullRequest) PRStatus {
+	if pr.GetDraft() {
+		return PRStatusDraft
+	}
+
+	switch pr.GetState() {
+	case "open":
+		return PRStatusActive
+	case "closed":
+		return PRStatusClosed
+	default:
+		return PRStatusUnspecified
+	}
 }
