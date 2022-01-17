@@ -2,14 +2,16 @@ package pr
 
 import "context"
 
-type Aggregator struct {
-	services []Service
+var _ Service = (*AggregatorService)(nil)
+
+type AggregatorService struct {
+	services []SingleProviderService
 }
 
-func NewAggregator(configs []ProviderConfiguration) (*Aggregator, error) {
-	services := make([]Service, 0, len(configs))
+func NewAggregatorService(configs []ProviderConfiguration) (*AggregatorService, error) {
+	services := make([]SingleProviderService, 0, len(configs))
 	for _, config := range configs {
-		svc, err := NewService(config)
+		svc, err := NewSingleProviderService(config)
 		if err != nil {
 			return nil, err
 		}
@@ -17,10 +19,10 @@ func NewAggregator(configs []ProviderConfiguration) (*Aggregator, error) {
 		services = append(services, *svc)
 	}
 
-	return &Aggregator{services: services}, nil
+	return &AggregatorService{services: services}, nil
 }
 
-func (a Aggregator) GetAllPRs(ctx context.Context) ([]Repository, error) {
+func (a AggregatorService) GetAllPRs(ctx context.Context) ([]Repository, error) {
 	var allRepos []Repository
 	for _, svc := range a.services {
 		repos, err := svc.GetAllPRs(ctx)

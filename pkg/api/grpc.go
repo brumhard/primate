@@ -12,10 +12,10 @@ var _ dashboardv1.DashboardServiceServer = (*GRPC)(nil)
 
 type GRPC struct {
 	dashboardv1.UnimplementedDashboardServiceServer
-	service *pr.Aggregator
+	service pr.Service
 }
 
-func NewGRPC(service *pr.Aggregator) *GRPC {
+func NewGRPC(service pr.Service) *GRPC {
 	return &GRPC{service: service}
 }
 

@@ -24,19 +24,30 @@ const (
 	ProviderTypeAzureDevops = "azuredevops"
 )
 
+type Service interface {
+	GetAllPRs(ctx context.Context) ([]Repository, error)
+}
+
+var _ Service = (*SingleProviderService)(nil)
+
+type SingleProviderService struct {
+	repos    []string
+	provider Provider
+}
+
 type ProviderConfiguration struct {
 	Repositories []string
 	ProviderType ProviderType
 	ExtraConfig  map[string]interface{}
 }
 
-func NewService(config ProviderConfiguration) (*Service, error) {
+func NewSingleProviderService(config ProviderConfiguration) (*SingleProviderService, error) {
 	provider, err := providerForType(config.ProviderType, config.ExtraConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Service{repos: config.Repositories, provider: provider}, nil
+	return &SingleProviderService{repos: config.Repositories, provider: provider}, nil
 }
 
 func providerForType(providerType ProviderType, cfg map[string]interface{}) (Provider, error) {
@@ -59,12 +70,7 @@ func providerForType(providerType ProviderType, cfg map[string]interface{}) (Pro
 	return nil, errors.Wrap(ErrUnknownProvider, string(providerType))
 }
 
-type Service struct {
-	repos    []string
-	provider Provider
-}
-
-func (s Service) GetAllPRs(ctx context.Context) ([]Repository, error) {
+func (s SingleProviderService) GetAllPRs(ctx context.Context) ([]Repository, error) {
 	repos := make([]Repository, 0, len(s.repos))
 	for _, repo := range s.repos {
 		prs, err := s.provider.GetPRsForRepo(ctx, repo)

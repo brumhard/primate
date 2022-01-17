@@ -61,13 +61,18 @@ func run() error {
 
 	defer logger.Sync()
 
-	aggregator, err := pr.NewAggregator(config.Providers)
+	aggregator, err := pr.NewAggregatorService(config.Providers)
+	if err != nil {
+		return err
+	}
+
+	cached, err := pr.WithCache(aggregator)
 	if err != nil {
 		return err
 	}
 
 	srv := grpc.NewServer()
-	dashboardv1.RegisterDashboardServiceServer(srv, api.NewGRPC(aggregator))
+	dashboardv1.RegisterDashboardServiceServer(srv, api.NewGRPC(cached))
 	reflection.Register(srv)
 	wrapped := grpcweb.WrapServer(
 		srv,
