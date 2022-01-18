@@ -1,7 +1,7 @@
 import 'package:app/services/pr.dart';
 import 'package:app/services/theme.dart';
+import 'package:app/ui/animate_once.dart';
 import 'package:app/ui/colors.dart';
-import 'package:app/ui/loader_icon.dart';
 import 'package:app/ui/repo_card.dart';
 import 'package:app/ui/skeletons/skeleton_repo_card.dart';
 import 'package:flutter/material.dart';
@@ -48,14 +48,12 @@ class Home extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AnimatedBuilder(
-              animation: prService.isLoading,
-              builder: (context, child) {
-                return IconButton(
-                  onPressed: () => prService.loadPRs(),
-                  icon: LoaderIcon(isLoading: prService.isLoading.value),
-                );
-              },
+            IconButton(
+              onPressed: () => prService.loadPRs(),
+              icon: TurnAtLeastOnceOnListenable(
+                child: const Icon(Icons.replay_rounded),
+                listenable: prService.isLoading,
+              ),
             ),
             Text(title),
             Container()
