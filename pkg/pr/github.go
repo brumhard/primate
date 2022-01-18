@@ -71,6 +71,20 @@ func (g GitHub) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) 
 	return prs, nil
 }
 
+func (g GitHub) GetURLForRepo(ctx context.Context, repoID string) (string, error) {
+	owner, repoName, err := ownerRepoFromID(repoID)
+	if err != nil {
+		return "", err
+	}
+
+	repo, _, err := g.client.Repositories.Get(ctx, owner, repoName)
+	if err != nil {
+		return "", err
+	}
+
+	return repo.GetHTMLURL(), nil
+}
+
 func (g GitHub) statusForPR(pr *github.PullRequest) PRStatus {
 	if pr.GetDraft() {
 		return PRStatusDraft

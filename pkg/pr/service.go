@@ -15,6 +15,8 @@ type Provider interface {
 	// For GitHub it would be sth like owner/repository.
 	// For AzureDevops it would be sth like project/repository.
 	GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error)
+	// GetURLForRepo returns the web URL for a given repo.
+	GetURLForRepo(ctx context.Context, repoID string) (string, error)
 }
 
 type ProviderType string
@@ -79,8 +81,14 @@ func (s SingleProviderService) GetAllPRs(ctx context.Context) ([]Repository, err
 			return nil, err
 		}
 
+		repoURL, err := s.provider.GetURLForRepo(ctx, repo)
+		if err != nil {
+			return nil, err
+		}
+
 		repos = append(repos, Repository{
 			Name:         repo,
+			URL:          repoURL,
 			PullRequests: prs,
 		})
 	}

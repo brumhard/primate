@@ -76,6 +76,28 @@ func (ad AzureDevops) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, e
 	return prs, nil
 }
 
+func (ad AzureDevops) GetURLForRepo(ctx context.Context, repoID string) (string, error) {
+	gitClient, err := git.NewClient(ctx, ad.conn)
+	if err != nil {
+		return "", err
+	}
+
+	project, repoName, err := projectRepoFromID(repoID)
+	if err != nil {
+		return "", err
+	}
+
+	repo, err := gitClient.GetRepository(ctx, git.GetRepositoryArgs{
+		RepositoryId: &repoName,
+		Project:      &project,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return *repo.WebUrl, nil
+}
+
 func (ad AzureDevops) statusForPR(pr git.GitPullRequest) PRStatus {
 	if pr.IsDraft != nil && *pr.IsDraft {
 		return PRStatusDraft
