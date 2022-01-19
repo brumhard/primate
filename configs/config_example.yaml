@@ -9,3 +9,11 @@ providers:
   - providerType: "github"
     repositories:
       - "owner/repo"
+    extraConfig:
+      pat: "xxxxxxxxxx"
+  - providerType: "bitbucketv1"
+    repositories:
+      - "owner/repo"
+    extraConfig:
+      baseUrl: "http://localhost:7990/rest"
+      pat: "xxxxxxxxxx"

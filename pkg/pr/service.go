@@ -24,6 +24,7 @@ type ProviderType string
 const (
 	ProviderTypeGitHub      = "github"
 	ProviderTypeAzureDevops = "azuredevops"
+	ProviderTypeBitbucketV1 = "bitbucketv1"
 )
 
 type Service interface {
@@ -68,6 +69,13 @@ func providerForType(providerType ProviderType, cfg map[string]interface{}) (Pro
 		}
 
 		return NewGitHubProvider(&config)
+	case ProviderTypeBitbucketV1:
+		var config BitbucketConfig
+		if err := mapstructure.Decode(cfg, &config); err != nil {
+			return nil, err
+		}
+
+		return NewBitbucketProvider(&config)
 	}
 	return nil, errors.Wrap(ErrUnknownProvider, string(providerType))
 }
