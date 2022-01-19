@@ -76,11 +76,14 @@ class RepositoryCard extends StatelessWidget {
 }
 
 String iconForRepoUrl(String url) {
-  if (url.contains("github.com")) {
-    return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/github.svg";
+  if (url.contains("github")) {
+    return "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/github.svg";
   }
-  if (url.contains("dev.azure.com")) {
-    return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/microsoft-azure-devops.svg";
+  if (url.contains("azure")) {
+    return "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/azuredevops.svg";
   }
-  return "https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/git.svg";
+  if (url.contains("bitbucket")) {
+    return "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/bitbucket.svg";
+  }
+  return "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/git.svg";
 }
