@@ -10,6 +10,7 @@
 # generated
 bin/
 out/
+app/build/
 
 # docs
 api/
