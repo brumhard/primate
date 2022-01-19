@@ -4,17 +4,18 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
+	"io/fs"
 	"net"
 	"net/http"
 	"os"
 	"os/signal"
-	"path"
-	"strings"
 	"syscall"
 	"time"
 
 	"github.com/brumhard/alligotor"
+	"github.com/brumhard/pr-dashboard/app"
 	"github.com/brumhard/pr-dashboard/pkg/api"
+	ownhttp "github.com/brumhard/pr-dashboard/pkg/http"
 	dashboardv1 "github.com/brumhard/pr-dashboard/pkg/pb/dashboard/v1"
 	"github.com/brumhard/pr-dashboard/pkg/pr"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
@@ -79,6 +80,11 @@ func run() error {
 		grpcweb.WithOriginFunc(func(origin string) bool { return true }),
 	)
 
+	webContents, err := fs.Sub(app.Static, "build/web")
+	if err != nil {
+		return err
+	}
+
 	httpServer := &http.Server{
 		// These interfere with websocket streams, disable for now
 		// ReadTimeout: 5 * time.Second,
@@ -98,7 +104,7 @@ func run() error {
 				wrapped.ServeHTTP(w, r)
 				return
 			}
-			spaHandler(func(rw http.ResponseWriter, r *http.Request) {}).ServeHTTP(w, r)
+			ownhttp.NewSPAHandler(http.FS(webContents), "index.html").ServeHTTP(w, r)
 		}),
 	}
 
@@ -137,14 +143,4 @@ func run() error {
 	})
 
 	return eg.Wait()
-}
-
-func spaHandler(fn http.HandlerFunc) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if strings.HasSuffix(r.URL.Path, "/") {
-			// Use contents of index.html for directory, if present.
-			r.URL.Path = path.Join(r.URL.Path, "index.html")
-		}
-		fn(w, r)
-	})
 }
