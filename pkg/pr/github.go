@@ -46,7 +46,24 @@ func ownerRepoFromID(repoID string) (string, string, error) {
 }
 
 func (g GitHub) ListReposForProject(ctx context.Context, project string) ([]string, error) {
-	return nil, nil
+	var repoIDs []string
+
+	err := forEachPage(func(opts github.ListOptions) (*github.Response, error) {
+		repos, resp, err := g.client.Repositories.List(ctx, project, &github.RepositoryListOptions{ListOptions: opts})
+		if err != nil {
+			return nil, err
+		}
+		for _, repo := range repos {
+			repoIDs = append(repoIDs, repo.GetFullName())
+		}
+
+		return resp, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return repoIDs, nil
 }
 
 func (g GitHub) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) {
@@ -54,22 +71,30 @@ func (g GitHub) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) 
 	if err != nil {
 		return nil, err
 	}
-	pullrequests, _, err := g.client.PullRequests.List(ctx, owner, repo, nil)
+
+	var prs []PR
+	err = forEachPage(func(opts github.ListOptions) (*github.Response, error) {
+		pullrequests, resp, err := g.client.PullRequests.List(ctx, owner, repo, &github.PullRequestListOptions{ListOptions: opts})
+		if err != nil {
+			return nil, err
+		}
+
+		for _, pullrequest := range pullrequests {
+			prs = append(prs, PR{
+				Title:        pullrequest.GetTitle(),
+				URL:          pullrequest.GetHTMLURL(),
+				User:         pullrequest.GetUser().GetLogin(),
+				SourceBranch: pullrequest.GetHead().GetRef(),
+				TargetBranch: pullrequest.GetBase().GetRef(),
+				CreatedAt:    pullrequest.GetCreatedAt(),
+				Status:       g.statusForPR(pullrequest),
+			})
+		}
+
+		return resp, nil
+	})
 	if err != nil {
 		return nil, err
-	}
-
-	prs := make([]PR, 0, len(pullrequests))
-	for _, pullrequest := range pullrequests {
-		prs = append(prs, PR{
-			Title:        pullrequest.GetTitle(),
-			URL:          pullrequest.GetHTMLURL(),
-			User:         pullrequest.GetUser().GetLogin(),
-			SourceBranch: pullrequest.GetHead().GetRef(),
-			TargetBranch: pullrequest.GetBase().GetRef(),
-			CreatedAt:    pullrequest.GetCreatedAt(),
-			Status:       g.statusForPR(pullrequest),
-		})
 	}
 
 	return prs, nil
@@ -102,4 +127,22 @@ func (g GitHub) statusForPR(pr *github.PullRequest) PRStatus {
 	default:
 		return PRStatusUnspecified
 	}
+}
+
+func forEachPage(pageFn func(opts github.ListOptions) (*github.Response, error)) error {
+	opts := github.ListOptions{PerPage: 20}
+
+	for {
+		resp, err := pageFn(opts)
+		if err != nil {
+			return err
+		}
+
+		if resp == nil || resp.NextPage == 0 {
+			break
+		}
+		opts.Page = resp.NextPage
+	}
+
+	return nil
 }
