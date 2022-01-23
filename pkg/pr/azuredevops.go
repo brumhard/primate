@@ -3,6 +3,7 @@ package pr
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v6"
@@ -39,7 +40,22 @@ func projectRepoFromID(repoID string) (string, string, error) {
 }
 
 func (ad AzureDevops) ListReposForProject(ctx context.Context, project string) ([]string, error) {
-	return nil, nil
+	gitClient, err := git.NewClient(ctx, ad.conn)
+	if err != nil {
+		return nil, err
+	}
+
+	repos, err := gitClient.GetRepositories(ctx, git.GetRepositoriesArgs{Project: &project})
+	if err != nil {
+		return nil, err
+	}
+
+	var repoIDs []string
+	for _, repo := range *repos {
+		repoIDs = append(repoIDs, fmt.Sprintf("%s/%s", project, *repo.Name))
+	}
+
+	return repoIDs, nil
 }
 
 func (ad AzureDevops) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) {
