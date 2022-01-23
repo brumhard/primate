@@ -28,6 +28,10 @@ func NewBitbucketProvider(cfg *BitbucketConfig) (*Bitbucket, error) {
 	}, nil
 }
 
+func (b Bitbucket) ListReposForProject(ctx context.Context, project string) ([]string, error) {
+	return nil, nil
+}
+
 // GetPRsForRepo returns all PRs for a given repo.
 // repoID is the unique identifier of the repository.
 // For GitHub it would be sth like owner/repository.

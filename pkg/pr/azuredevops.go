@@ -38,6 +38,10 @@ func projectRepoFromID(repoID string) (string, string, error) {
 	return split[0], split[1], nil
 }
 
+func (ad AzureDevops) ListReposForProject(ctx context.Context, project string) ([]string, error) {
+	return nil, nil
+}
+
 func (ad AzureDevops) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) {
 	gitClient, err := git.NewClient(ctx, ad.conn)
 	if err != nil {

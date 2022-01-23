@@ -45,6 +45,10 @@ func ownerRepoFromID(repoID string) (string, string, error) {
 	return split[0], split[1], nil
 }
 
+func (g GitHub) ListReposForProject(ctx context.Context, project string) ([]string, error) {
+	return nil, nil
+}
+
 func (g GitHub) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) {
 	owner, repo, err := ownerRepoFromID(repoID)
 	if err != nil {

@@ -10,6 +10,10 @@ import (
 var ErrUnknownProvider = errors.New("unknown provider")
 
 type Provider interface {
+	// ListReposForProject fetches all repositories in a project
+	// (could be called sth else in each provider, e.g. it would be owner/org in github).
+	// It returns a list of repoIDs that should be valid input for GetPRsForRepo.
+	ListReposForProject(ctx context.Context, project string) ([]string, error)
 	// GetPRsForRepo returns all PRs for a given repo.
 	// repoID is the unique identifier of the repository.
 	// For GitHub it would be sth like owner/repository.
