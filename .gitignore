@@ -3,6 +3,7 @@
 ###########
 
 configs/config.yaml
+cmd/testing/
 
 # make output
 bin/

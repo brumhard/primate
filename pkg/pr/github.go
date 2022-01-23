@@ -48,7 +48,7 @@ func ownerRepoFromID(repoID string) (string, string, error) {
 func (g GitHub) ListReposForProject(ctx context.Context, project string) ([]string, error) {
 	var repoIDs []string
 
-	err := forEachPage(func(opts github.ListOptions) (*github.Response, error) {
+	err := g.forEachPage(func(opts github.ListOptions) (*github.Response, error) {
 		repos, resp, err := g.client.Repositories.List(ctx, project, &github.RepositoryListOptions{ListOptions: opts})
 		if err != nil {
 			return nil, err
@@ -73,7 +73,7 @@ func (g GitHub) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) 
 	}
 
 	var prs []PR
-	err = forEachPage(func(opts github.ListOptions) (*github.Response, error) {
+	err = g.forEachPage(func(opts github.ListOptions) (*github.Response, error) {
 		pullrequests, resp, err := g.client.PullRequests.List(ctx, owner, repo, &github.PullRequestListOptions{ListOptions: opts})
 		if err != nil {
 			return nil, err
@@ -129,7 +129,7 @@ func (g GitHub) statusForPR(pr *github.PullRequest) PRStatus {
 	}
 }
 
-func forEachPage(pageFn func(opts github.ListOptions) (*github.Response, error)) error {
+func (g GitHub) forEachPage(pageFn func(opts github.ListOptions) (*github.Response, error)) error {
 	opts := github.ListOptions{PerPage: 20}
 
 	for {

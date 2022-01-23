@@ -2,6 +2,7 @@ package pr
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	bitbucketv1 "github.com/gfleury/go-bitbucket-v1"
@@ -29,7 +30,27 @@ func NewBitbucketProvider(cfg *BitbucketConfig) (*Bitbucket, error) {
 }
 
 func (b Bitbucket) ListReposForProject(ctx context.Context, project string) ([]string, error) {
-	return nil, nil
+	var repoIDs []string
+
+	b.forEachPage(func(opts map[string]interface{}) (*bitbucketv1.APIResponse, error) {
+		resp, err := b.client.DefaultApi.GetRepositoriesWithOptions(project, opts)
+		if err != nil {
+			return nil, err
+		}
+
+		repos, err := bitbucketv1.GetRepositoriesResponse(resp)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, repo := range repos {
+			repoIDs = append(repoIDs, fmt.Sprintf("%s/%s", project, repo.Slug))
+		}
+
+		return resp, err
+	})
+
+	return repoIDs, nil
 }
 
 // GetPRsForRepo returns all PRs for a given repo.
@@ -66,12 +87,8 @@ func (b Bitbucket) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, erro
 func (b Bitbucket) fetchAllPRs(project, repo string) ([]bitbucketv1.PullRequest, error) {
 	var pullrequests []bitbucketv1.PullRequest
 
-	start := 0
-	for {
-		resp, err := b.client.DefaultApi.GetPullRequestsPage(project, repo, map[string]interface{}{
-			"state": "OPEN",
-			"start": start,
-		})
+	b.forEachPage(func(opts map[string]interface{}) (*bitbucketv1.APIResponse, error) {
+		resp, err := b.client.DefaultApi.GetPullRequestsPage(project, repo, opts)
 		if err != nil {
 			return nil, err
 		}
@@ -82,13 +99,8 @@ func (b Bitbucket) fetchAllPRs(project, repo string) ([]bitbucketv1.PullRequest,
 		}
 		pullrequests = append(pullrequests, pullrequestsPart...)
 
-		hasNextPage, nextPage := bitbucketv1.HasNextPage(resp)
-		if !hasNextPage {
-			break
-		}
-
-		start = nextPage
-	}
+		return resp, err
+	})
 
 	return pullrequests, nil
 }
@@ -122,4 +134,23 @@ func (b Bitbucket) statusForPR(status string) PRStatus {
 	default:
 		return PRStatusUnspecified
 	}
+}
+
+func (b Bitbucket) forEachPage(pageFn func(opts map[string]interface{}) (*bitbucketv1.APIResponse, error)) error {
+	start := 0
+	for {
+		resp, err := pageFn(map[string]interface{}{"start": start})
+		if err != nil {
+			return err
+		}
+
+		hasNextPage, nextPage := bitbucketv1.HasNextPage(resp)
+		if !hasNextPage {
+			break
+		}
+
+		start = nextPage
+	}
+
+	return nil
 }
