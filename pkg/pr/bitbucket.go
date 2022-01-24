@@ -2,7 +2,6 @@ package pr
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	bitbucketv1 "github.com/gfleury/go-bitbucket-v1"
@@ -30,7 +29,7 @@ func NewBitbucketProvider(cfg *BitbucketConfig) (*Bitbucket, error) {
 }
 
 func (b Bitbucket) ListRepositoriesForProject(_ context.Context, project string) ([]string, error) {
-	var repoIDs []string
+	var repoNames []string
 
 	err := b.forEachPage(func(opts map[string]interface{}) (*bitbucketv1.APIResponse, error) {
 		resp, err := b.client.DefaultApi.GetRepositoriesWithOptions(project, opts)
@@ -44,7 +43,7 @@ func (b Bitbucket) ListRepositoriesForProject(_ context.Context, project string)
 		}
 
 		for _, repo := range repos {
-			repoIDs = append(repoIDs, fmt.Sprintf("%s/%s", project, repo.Slug))
+			repoNames = append(repoNames, repo.Slug)
 		}
 
 		return resp, err
@@ -53,7 +52,7 @@ func (b Bitbucket) ListRepositoriesForProject(_ context.Context, project string)
 		return nil, err
 	}
 
-	return repoIDs, nil
+	return repoNames, nil
 }
 
 func (b Bitbucket) ListPullRequestsForRepository(_ context.Context, project, repo string) ([]PR, error) {

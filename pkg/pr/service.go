@@ -13,12 +13,10 @@ var ErrUnknownProvider = errors.New("unknown provider")
 type Provider interface {
 	// ListRepositoriesForProject fetches all repositories in a project
 	// (could be called sth else in each provider, e.g. it would be owner/org in github).
-	// It returns a list of repoIDs that should be valid input for GetPRsForRepo.
+	// It returns a list of repository names.
 	ListRepositoriesForProject(ctx context.Context, project string) ([]string, error)
-	// ListPullRequestsForRepository returns all PRs for a given repo.
-	// repoID is the unique identifier of the repository.
-	// For GitHub it would be sth like owner/repository.
-	// For AzureDevops it would be sth like project/repository.
+	// ListPullRequestsForRepository returns all PRs for a given project and repo.
+	// For GitHub the project would be an organization or user.
 	ListPullRequestsForRepository(ctx context.Context, project, repo string) ([]PR, error)
 	// GetRepositoryURL returns the web URL for a given repo.
 	GetRepositoryURL(ctx context.Context, project, repo string) (string, error)

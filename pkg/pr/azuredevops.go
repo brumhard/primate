@@ -2,7 +2,6 @@ package pr
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/microsoft/azure-devops-go-api/azuredevops/v6"
@@ -40,12 +39,12 @@ func (ad AzureDevops) ListRepositoriesForProject(ctx context.Context, project st
 		return nil, err
 	}
 
-	repoIDs := make([]string, 0, len(*repos))
+	repoNames := make([]string, 0, len(*repos))
 	for _, repo := range *repos {
-		repoIDs = append(repoIDs, fmt.Sprintf("%s/%s", project, *repo.Name))
+		repoNames = append(repoNames, *repo.Name)
 	}
 
-	return repoIDs, nil
+	return repoNames, nil
 }
 
 func (ad AzureDevops) ListPullRequestsForRepository(ctx context.Context, project, repo string) ([]PR, error) {

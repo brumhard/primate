@@ -35,7 +35,7 @@ func NewGitHubProvider(cfg *GitHubConfig) (*GitHub, error) {
 }
 
 func (g GitHub) ListRepositoriesForProject(ctx context.Context, project string) ([]string, error) {
-	var repoIDs []string
+	var repoNames []string
 
 	err := g.forEachPage(func(opts github.ListOptions) (*github.Response, error) {
 		repos, resp, err := g.client.Repositories.List(ctx, project, &github.RepositoryListOptions{ListOptions: opts})
@@ -43,7 +43,7 @@ func (g GitHub) ListRepositoriesForProject(ctx context.Context, project string) 
 			return nil, err
 		}
 		for _, repo := range repos {
-			repoIDs = append(repoIDs, repo.GetFullName())
+			repoNames = append(repoNames, repo.GetName())
 		}
 
 		return resp, nil
@@ -52,7 +52,7 @@ func (g GitHub) ListRepositoriesForProject(ctx context.Context, project string) 
 		return nil, err
 	}
 
-	return repoIDs, nil
+	return repoNames, nil
 }
 
 func (g GitHub) ListPullRequestsForRepository(ctx context.Context, project, repo string) ([]PR, error) {
