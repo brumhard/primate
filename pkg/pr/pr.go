@@ -8,13 +8,13 @@ type Repository struct {
 	PullRequests []PR
 }
 
-type PRStatus int
+type Status int
 
 const (
-	PRStatusUnspecified PRStatus = iota
-	PRStatusDraft
-	PRStatusActive
-	PRStatusClosed
+	StatusUnspecified Status = iota
+	StatusDraft
+	StatusActive
+	StatusClosed
 )
 
 type PR struct {
@@ -24,5 +24,5 @@ type PR struct {
 	SourceBranch string
 	TargetBranch string
 	CreatedAt    time.Time
-	Status       PRStatus
+	Status       Status
 }

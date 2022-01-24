@@ -19,7 +19,9 @@ func NewGRPC(service pr.Service) *GRPC {
 	return &GRPC{service: service}
 }
 
-func (g *GRPC) ListPullRequests(ctx context.Context, request *dashboardv1.ListPullRequestsRequest) (*dashboardv1.ListPullRequestsResponse, error) {
+func (g *GRPC) ListPullRequests(
+	ctx context.Context, request *dashboardv1.ListPullRequestsRequest,
+) (*dashboardv1.ListPullRequestsResponse, error) {
 	repos, err := g.service.GetAllPRs(ctx)
 	if err != nil {
 		return nil, err

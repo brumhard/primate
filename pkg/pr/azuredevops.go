@@ -2,7 +2,6 @@ package pr
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -30,16 +29,7 @@ func NewAzureDevopsProvider(cfg *AzureDevopsConfig) (*AzureDevops, error) {
 	return &AzureDevops{conn: connection}, nil
 }
 
-func projectRepoFromID(repoID string) (string, string, error) {
-	split := strings.Split(repoID, "/")
-	if len(split) != 2 {
-		return "", "", errors.New("malformed repoID")
-	}
-
-	return split[0], split[1], nil
-}
-
-func (ad AzureDevops) ListReposForProject(ctx context.Context, project string) ([]string, error) {
+func (ad AzureDevops) ListRepositoriesForProject(ctx context.Context, project string) ([]string, error) {
 	gitClient, err := git.NewClient(ctx, ad.conn)
 	if err != nil {
 		return nil, err
@@ -50,7 +40,7 @@ func (ad AzureDevops) ListReposForProject(ctx context.Context, project string) (
 		return nil, err
 	}
 
-	var repoIDs []string
+	repoIDs := make([]string, 0, len(*repos))
 	for _, repo := range *repos {
 		repoIDs = append(repoIDs, fmt.Sprintf("%s/%s", project, *repo.Name))
 	}
@@ -58,13 +48,8 @@ func (ad AzureDevops) ListReposForProject(ctx context.Context, project string) (
 	return repoIDs, nil
 }
 
-func (ad AzureDevops) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) {
+func (ad AzureDevops) ListPullRequestsForRepository(ctx context.Context, project, repo string) ([]PR, error) {
 	gitClient, err := git.NewClient(ctx, ad.conn)
-	if err != nil {
-		return nil, err
-	}
-
-	project, repo, err := projectRepoFromID(repoID)
 	if err != nil {
 		return nil, err
 	}
@@ -96,13 +81,8 @@ func (ad AzureDevops) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, e
 	return prs, nil
 }
 
-func (ad AzureDevops) GetURLForRepo(ctx context.Context, repoID string) (string, error) {
+func (ad AzureDevops) GetRepositoryURL(ctx context.Context, project, repoName string) (string, error) {
 	gitClient, err := git.NewClient(ctx, ad.conn)
-	if err != nil {
-		return "", err
-	}
-
-	project, repoName, err := projectRepoFromID(repoID)
 	if err != nil {
 		return "", err
 	}
@@ -118,22 +98,22 @@ func (ad AzureDevops) GetURLForRepo(ctx context.Context, repoID string) (string,
 	return *repo.WebUrl, nil
 }
 
-func (ad AzureDevops) statusForPR(pr git.GitPullRequest) PRStatus {
+func (ad AzureDevops) statusForPR(pr git.GitPullRequest) Status {
 	if pr.IsDraft != nil && *pr.IsDraft {
-		return PRStatusDraft
+		return StatusDraft
 	}
 
 	if pr.Status == nil {
-		return PRStatusUnspecified
+		return StatusUnspecified
 	}
 
 	switch *pr.Status {
 	case "active":
-		return PRStatusActive
+		return StatusActive
 	case "completed":
-		return PRStatusClosed
+		return StatusClosed
 	default:
-		return PRStatusUnspecified
+		return StatusUnspecified
 	}
 }
 

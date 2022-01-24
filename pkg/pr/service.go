@@ -2,6 +2,7 @@ package pr
 
 import (
 	"context"
+	"strings"
 
 	"github.com/mitchellh/mapstructure"
 	"github.com/pkg/errors"
@@ -10,17 +11,17 @@ import (
 var ErrUnknownProvider = errors.New("unknown provider")
 
 type Provider interface {
-	// ListReposForProject fetches all repositories in a project
+	// ListRepositoriesForProject fetches all repositories in a project
 	// (could be called sth else in each provider, e.g. it would be owner/org in github).
 	// It returns a list of repoIDs that should be valid input for GetPRsForRepo.
-	ListReposForProject(ctx context.Context, project string) ([]string, error)
-	// GetPRsForRepo returns all PRs for a given repo.
+	ListRepositoriesForProject(ctx context.Context, project string) ([]string, error)
+	// ListPullRequestsForRepository returns all PRs for a given repo.
 	// repoID is the unique identifier of the repository.
 	// For GitHub it would be sth like owner/repository.
 	// For AzureDevops it would be sth like project/repository.
-	GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error)
-	// GetURLForRepo returns the web URL for a given repo.
-	GetURLForRepo(ctx context.Context, repoID string) (string, error)
+	ListPullRequestsForRepository(ctx context.Context, project, repo string) ([]PR, error)
+	// GetRepositoryURL returns the web URL for a given repo.
+	GetRepositoryURL(ctx context.Context, project, repo string) (string, error)
 }
 
 type ProviderType string
@@ -84,16 +85,29 @@ func providerForType(providerType ProviderType, cfg map[string]interface{}) (Pro
 	return nil, errors.Wrap(ErrUnknownProvider, string(providerType))
 }
 
-// TODO: include functionality to include repo url in response
+func projectRepoFromID(repoID string) (project, repo string, err error) {
+	split := strings.Split(repoID, "/")
+	if len(split) != 2 {
+		return "", "", errors.New("malformed repoID")
+	}
+
+	return split[0], split[1], nil
+}
+
 func (s SingleProviderService) GetAllPRs(ctx context.Context) ([]Repository, error) {
 	repos := make([]Repository, 0, len(s.repos))
-	for _, repo := range s.repos {
-		prs, err := s.provider.GetPRsForRepo(ctx, repo)
+	for _, repoID := range s.repos {
+		project, repo, err := projectRepoFromID(repoID)
 		if err != nil {
 			return nil, err
 		}
 
-		repoURL, err := s.provider.GetURLForRepo(ctx, repo)
+		prs, err := s.provider.ListPullRequestsForRepository(ctx, project, repo)
+		if err != nil {
+			return nil, err
+		}
+
+		repoURL, err := s.provider.GetRepositoryURL(ctx, project, repo)
 		if err != nil {
 			return nil, err
 		}

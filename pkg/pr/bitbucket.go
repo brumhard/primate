@@ -29,10 +29,10 @@ func NewBitbucketProvider(cfg *BitbucketConfig) (*Bitbucket, error) {
 	}, nil
 }
 
-func (b Bitbucket) ListReposForProject(ctx context.Context, project string) ([]string, error) {
+func (b Bitbucket) ListRepositoriesForProject(_ context.Context, project string) ([]string, error) {
 	var repoIDs []string
 
-	b.forEachPage(func(opts map[string]interface{}) (*bitbucketv1.APIResponse, error) {
+	err := b.forEachPage(func(opts map[string]interface{}) (*bitbucketv1.APIResponse, error) {
 		resp, err := b.client.DefaultApi.GetRepositoriesWithOptions(project, opts)
 		if err != nil {
 			return nil, err
@@ -49,20 +49,14 @@ func (b Bitbucket) ListReposForProject(ctx context.Context, project string) ([]s
 
 		return resp, err
 	})
-
-	return repoIDs, nil
-}
-
-// GetPRsForRepo returns all PRs for a given repo.
-// repoID is the unique identifier of the repository.
-// For GitHub it would be sth like owner/repository.
-// For AzureDevops it would be sth like project/repository.
-func (b Bitbucket) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) {
-	project, repo, err := projectRepoFromID(repoID)
 	if err != nil {
 		return nil, err
 	}
 
+	return repoIDs, nil
+}
+
+func (b Bitbucket) ListPullRequestsForRepository(_ context.Context, project, repo string) ([]PR, error) {
 	pullrequests, err := b.fetchAllPRs(project, repo)
 	if err != nil {
 		return nil, err
@@ -87,7 +81,7 @@ func (b Bitbucket) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, erro
 func (b Bitbucket) fetchAllPRs(project, repo string) ([]bitbucketv1.PullRequest, error) {
 	var pullrequests []bitbucketv1.PullRequest
 
-	b.forEachPage(func(opts map[string]interface{}) (*bitbucketv1.APIResponse, error) {
+	err := b.forEachPage(func(opts map[string]interface{}) (*bitbucketv1.APIResponse, error) {
 		resp, err := b.client.DefaultApi.GetPullRequestsPage(project, repo, opts)
 		if err != nil {
 			return nil, err
@@ -101,17 +95,14 @@ func (b Bitbucket) fetchAllPRs(project, repo string) ([]bitbucketv1.PullRequest,
 
 		return resp, err
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return pullrequests, nil
 }
 
-// GetURLForRepo returns the web URL for a given repo.
-func (b Bitbucket) GetURLForRepo(ctx context.Context, repoID string) (string, error) {
-	project, repoName, err := projectRepoFromID(repoID)
-	if err != nil {
-		return "", err
-	}
-
+func (b Bitbucket) GetRepositoryURL(_ context.Context, project, repoName string) (string, error) {
 	resp, err := b.client.DefaultApi.GetRepository(project, repoName)
 	if err != nil {
 		return "", err
@@ -125,14 +116,14 @@ func (b Bitbucket) GetURLForRepo(ctx context.Context, repoID string) (string, er
 	return repo.Links.Self[0].Href, nil
 }
 
-func (b Bitbucket) statusForPR(status string) PRStatus {
+func (b Bitbucket) statusForPR(status string) Status {
 	switch status {
 	case "OPEN":
-		return PRStatusActive
+		return StatusActive
 	case "DECLINED", "MERGED":
-		return PRStatusClosed
+		return StatusClosed
 	default:
-		return PRStatusUnspecified
+		return StatusUnspecified
 	}
 }
 

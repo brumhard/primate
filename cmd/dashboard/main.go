@@ -45,7 +45,8 @@ type Config struct {
 }
 
 func run() error {
-	cfgLoader := alligotor.New(alligotor.NewFilesSource("./configs/config.yaml", "/Users/brumhard/repos/personal/pr-dashboard/configs/config.yaml"))
+	cfgLoader := alligotor.New(
+		alligotor.NewFilesSource("./configs/config.yaml", "/Users/brumhard/repos/personal/pr-dashboard/configs/config.yaml"))
 	config := Config{
 		LogLevel:    zapcore.InfoLevel,
 		GRPCWebAddr: ":8080",
@@ -98,6 +99,7 @@ func run() error {
 				tls.CurveP256,
 				tls.X25519,
 			},
+			MinVersion: tls.VersionTLS12,
 		},
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			if wrapped.IsGrpcWebRequest(r) || wrapped.IsAcceptableGrpcCorsRequest(r) || wrapped.IsGrpcWebSocketRequest(r) {

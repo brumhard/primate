@@ -2,9 +2,7 @@ package pr
 
 import (
 	"context"
-	"errors"
 	"net/http"
-	"strings"
 
 	"github.com/google/go-github/v41/github"
 	"golang.org/x/oauth2"
@@ -36,16 +34,7 @@ func NewGitHubProvider(cfg *GitHubConfig) (*GitHub, error) {
 	}, nil
 }
 
-func ownerRepoFromID(repoID string) (string, string, error) {
-	split := strings.Split(repoID, "/")
-	if len(split) != 2 {
-		return "", "", errors.New("malformed repoID")
-	}
-
-	return split[0], split[1], nil
-}
-
-func (g GitHub) ListReposForProject(ctx context.Context, project string) ([]string, error) {
+func (g GitHub) ListRepositoriesForProject(ctx context.Context, project string) ([]string, error) {
 	var repoIDs []string
 
 	err := g.forEachPage(func(opts github.ListOptions) (*github.Response, error) {
@@ -66,15 +55,10 @@ func (g GitHub) ListReposForProject(ctx context.Context, project string) ([]stri
 	return repoIDs, nil
 }
 
-func (g GitHub) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) {
-	owner, repo, err := ownerRepoFromID(repoID)
-	if err != nil {
-		return nil, err
-	}
-
+func (g GitHub) ListPullRequestsForRepository(ctx context.Context, project, repo string) ([]PR, error) {
 	var prs []PR
-	err = g.forEachPage(func(opts github.ListOptions) (*github.Response, error) {
-		pullrequests, resp, err := g.client.PullRequests.List(ctx, owner, repo, &github.PullRequestListOptions{ListOptions: opts})
+	err := g.forEachPage(func(opts github.ListOptions) (*github.Response, error) {
+		pullrequests, resp, err := g.client.PullRequests.List(ctx, project, repo, &github.PullRequestListOptions{ListOptions: opts})
 		if err != nil {
 			return nil, err
 		}
@@ -100,13 +84,8 @@ func (g GitHub) GetPRsForRepo(ctx context.Context, repoID string) ([]PR, error) 
 	return prs, nil
 }
 
-func (g GitHub) GetURLForRepo(ctx context.Context, repoID string) (string, error) {
-	owner, repoName, err := ownerRepoFromID(repoID)
-	if err != nil {
-		return "", err
-	}
-
-	repo, _, err := g.client.Repositories.Get(ctx, owner, repoName)
+func (g GitHub) GetRepositoryURL(ctx context.Context, project, repoName string) (string, error) {
+	repo, _, err := g.client.Repositories.Get(ctx, project, repoName)
 	if err != nil {
 		return "", err
 	}
@@ -114,18 +93,18 @@ func (g GitHub) GetURLForRepo(ctx context.Context, repoID string) (string, error
 	return repo.GetHTMLURL(), nil
 }
 
-func (g GitHub) statusForPR(pr *github.PullRequest) PRStatus {
+func (g GitHub) statusForPR(pr *github.PullRequest) Status {
 	if pr.GetDraft() {
-		return PRStatusDraft
+		return StatusDraft
 	}
 
 	switch pr.GetState() {
 	case "open":
-		return PRStatusActive
+		return StatusActive
 	case "closed":
-		return PRStatusClosed
+		return StatusClosed
 	default:
-		return PRStatusUnspecified
+		return StatusUnspecified
 	}
 }
 
