@@ -13,7 +13,8 @@ providers:
       pat: "xxxxxxxxxx"
   - providerType: "bitbucketv1"
     repositories:
-      - "owner/repo"
+      # for repo name also regex is allowed. The following example would fetch all repositories in the project "project"
+      - "project/.*"
     extraConfig:
       baseUrl: "http://localhost:7990/rest"
       pat: "xxxxxxxxxx"

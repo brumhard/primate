@@ -2,6 +2,7 @@ package pr
 
 import (
 	"context"
+	"regexp"
 	"strings"
 
 	"github.com/mitchellh/mapstructure"
@@ -95,26 +96,45 @@ func projectRepoFromID(repoID string) (project, repo string, err error) {
 func (s SingleProviderService) GetAllPRs(ctx context.Context) ([]Repository, error) {
 	repos := make([]Repository, 0, len(s.repos))
 	for _, repoID := range s.repos {
-		project, repo, err := projectRepoFromID(repoID)
+		project, repoName, err := projectRepoFromID(repoID)
 		if err != nil {
 			return nil, err
 		}
 
-		prs, err := s.provider.ListPullRequestsForRepository(ctx, project, repo)
+		repoRegex, err := regexp.Compile(repoName)
+		if err != nil {
+			// TODO: if no regex can be created, still try to fetch the repo with given string
+			return nil, err
+		}
+
+		reposInProject, err := s.provider.ListRepositoriesForProject(ctx, project)
 		if err != nil {
 			return nil, err
 		}
 
-		repoURL, err := s.provider.GetRepositoryURL(ctx, project, repo)
-		if err != nil {
-			return nil, err
+		for _, repo := range reposInProject {
+			if !repoRegex.MatchString(repo) {
+				continue
+			}
+
+			prs, err := s.provider.ListPullRequestsForRepository(ctx, project, repo)
+			if err != nil {
+				return nil, err
+			}
+
+			repoURL, err := s.provider.GetRepositoryURL(ctx, project, repo)
+			if err != nil {
+				return nil, err
+			}
+
+			repos = append(repos, Repository{
+				Name:         repo,
+				URL:          repoURL,
+				PullRequests: prs,
+			})
 		}
 
-		repos = append(repos, Repository{
-			Name:         repo,
-			URL:          repoURL,
-			PullRequests: prs,
-		})
+
 	}
 
 	return repos, nil
