@@ -52,3 +52,36 @@ func (g *GRPC) ListPullRequests(
 		Items: grpcRepos,
 	}, nil
 }
+
+func (g *GRPC) StreamPullRequests(request *dashboardv1.StreamPullRequestsRequest, server dashboardv1.DashboardService_StreamPullRequestsServer) error {
+
+	repos, err := g.service.GetAllPRs(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	grpcRepos := make([]*dashboardv1.Repository, 0, len(repos))
+	for _, repo := range repos {
+		grpcPRs := make([]*dashboardv1.PullRequest, 0, len(repo.PullRequests))
+		for _, pullrequest := range repo.PullRequests {
+			grpcPRs = append(grpcPRs, &dashboardv1.PullRequest{
+				Title:        pullrequest.Title,
+				Url:          pullrequest.URL,
+				User:         pullrequest.User,
+				SourceBranch: pullrequest.SourceBranch,
+				TargetBranch: pullrequest.TargetBranch,
+				CreatedAt:    pullrequest.CreatedAt.Format(time.RFC3339),
+				Status:       dashboardv1.PullRequest_Status(pullrequest.Status),
+			})
+		}
+
+		grpcRepos = append(grpcRepos, &dashboardv1.Repository{
+			Name:         repo.Name,
+			Url:          repo.URL,
+			Pullrequests: grpcPRs,
+		})
+	}
+	return &dashboardv1.ListPullRequestsResponse{
+		Items: grpcRepos,
+	}, nil
+}

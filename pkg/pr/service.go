@@ -31,6 +31,11 @@ const (
 	ProviderTypeBitbucketV1 = "bitbucketv1"
 )
 
+type StreamerService interface {
+	Service
+	StreamAllPRs() (chan []Repository, error)
+}
+
 type Service interface {
 	GetAllPRs(ctx context.Context) ([]Repository, error)
 }
@@ -95,6 +100,7 @@ func projectRepoFromID(repoID string) (project, repo string, err error) {
 
 func (s SingleProviderService) GetAllPRs(ctx context.Context) ([]Repository, error) {
 	repos := make([]Repository, 0, len(s.repos))
+	// TODO: run concurrently to save time on slow responses
 	for _, repoID := range s.repos {
 		project, repoName, err := projectRepoFromID(repoID)
 		if err != nil {
@@ -133,7 +139,6 @@ func (s SingleProviderService) GetAllPRs(ctx context.Context) ([]Repository, err
 				PullRequests: prs,
 			})
 		}
-
 
 	}
 
