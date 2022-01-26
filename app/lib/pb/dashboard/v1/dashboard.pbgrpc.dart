@@ -20,11 +20,12 @@ class DashboardServiceClient extends $grpc.Client {
       ($0.ListPullRequestsRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) =>
           $0.ListPullRequestsResponse.fromBuffer(value));
-  static final _$streamPullRequests =
-      $grpc.ClientMethod<$0.StreamPullRequestsRequest, $0.PullRequest>(
-          '/dashboard.v1.DashboardService/StreamPullRequests',
-          ($0.StreamPullRequestsRequest value) => value.writeToBuffer(),
-          ($core.List<$core.int> value) => $0.PullRequest.fromBuffer(value));
+  static final _$streamPullRequests = $grpc.ClientMethod<
+          $0.StreamPullRequestsRequest, $0.ListPullRequestsResponse>(
+      '/dashboard.v1.DashboardService/StreamPullRequests',
+      ($0.StreamPullRequestsRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) =>
+          $0.ListPullRequestsResponse.fromBuffer(value));
 
   DashboardServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -37,7 +38,7 @@ class DashboardServiceClient extends $grpc.Client {
     return $createUnaryCall(_$listPullRequests, request, options: options);
   }
 
-  $grpc.ResponseStream<$0.PullRequest> streamPullRequests(
+  $grpc.ResponseStream<$0.ListPullRequestsResponse> streamPullRequests(
       $0.StreamPullRequestsRequest request,
       {$grpc.CallOptions? options}) {
     return $createStreamingCall(
@@ -59,15 +60,15 @@ abstract class DashboardServiceBase extends $grpc.Service {
         ($core.List<$core.int> value) =>
             $0.ListPullRequestsRequest.fromBuffer(value),
         ($0.ListPullRequestsResponse value) => value.writeToBuffer()));
-    $addMethod(
-        $grpc.ServiceMethod<$0.StreamPullRequestsRequest, $0.PullRequest>(
-            'StreamPullRequests',
-            streamPullRequests_Pre,
-            false,
-            true,
-            ($core.List<$core.int> value) =>
-                $0.StreamPullRequestsRequest.fromBuffer(value),
-            ($0.PullRequest value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.StreamPullRequestsRequest,
+            $0.ListPullRequestsResponse>(
+        'StreamPullRequests',
+        streamPullRequests_Pre,
+        false,
+        true,
+        ($core.List<$core.int> value) =>
+            $0.StreamPullRequestsRequest.fromBuffer(value),
+        ($0.ListPullRequestsResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.ListPullRequestsResponse> listPullRequests_Pre(
@@ -76,13 +77,14 @@ abstract class DashboardServiceBase extends $grpc.Service {
     return listPullRequests(call, await request);
   }
 
-  $async.Stream<$0.PullRequest> streamPullRequests_Pre($grpc.ServiceCall call,
+  $async.Stream<$0.ListPullRequestsResponse> streamPullRequests_Pre(
+      $grpc.ServiceCall call,
       $async.Future<$0.StreamPullRequestsRequest> request) async* {
     yield* streamPullRequests(call, await request);
   }
 
   $async.Future<$0.ListPullRequestsResponse> listPullRequests(
       $grpc.ServiceCall call, $0.ListPullRequestsRequest request);
-  $async.Stream<$0.PullRequest> streamPullRequests(
+  $async.Stream<$0.ListPullRequestsResponse> streamPullRequests(
       $grpc.ServiceCall call, $0.StreamPullRequestsRequest request);
 }

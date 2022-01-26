@@ -6,6 +6,8 @@ import (
 
 	dashboardv1 "github.com/brumhard/pr-dashboard/pkg/pb/dashboard/v1"
 	"github.com/brumhard/pr-dashboard/pkg/pr"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var _ dashboardv1.DashboardServiceServer = (*GRPC)(nil)
@@ -27,39 +29,32 @@ func (g *GRPC) ListPullRequests(
 		return nil, err
 	}
 
-	grpcRepos := make([]*dashboardv1.Repository, 0, len(repos))
-	for _, repo := range repos {
-		grpcPRs := make([]*dashboardv1.PullRequest, 0, len(repo.PullRequests))
-		for _, pullrequest := range repo.PullRequests {
-			grpcPRs = append(grpcPRs, &dashboardv1.PullRequest{
-				Title:        pullrequest.Title,
-				Url:          pullrequest.URL,
-				User:         pullrequest.User,
-				SourceBranch: pullrequest.SourceBranch,
-				TargetBranch: pullrequest.TargetBranch,
-				CreatedAt:    pullrequest.CreatedAt.Format(time.RFC3339),
-				Status:       dashboardv1.PullRequest_Status(pullrequest.Status),
-			})
-		}
-
-		grpcRepos = append(grpcRepos, &dashboardv1.Repository{
-			Name:         repo.Name,
-			Url:          repo.URL,
-			Pullrequests: grpcPRs,
-		})
-	}
 	return &dashboardv1.ListPullRequestsResponse{
-		Items: grpcRepos,
+		Items: castRepos(repos),
 	}, nil
 }
 
 func (g *GRPC) StreamPullRequests(request *dashboardv1.StreamPullRequestsRequest, server dashboardv1.DashboardService_StreamPullRequestsServer) error {
-
-	repos, err := g.service.GetAllPRs(ctx)
-	if err != nil {
-		return nil, err
+	// TODO: check if service implements StreamerService
+	// if so call Stream method
+	// if not return unimplemented
+	streamer, ok := g.service.(pr.StreamerService)
+	if !ok {
+		return status.Errorf(codes.Unimplemented, "no implemented for the currently running service")
 	}
 
+	repoc, err := streamer.StreamAllPRs(server.Context())
+	if err != nil {
+		return err
+	}
+
+	for repos := range repoc {
+		server.Send(&dashboardv1.ListPullRequestsResponse{Items: castRepos(repos)})
+	}
+	return nil
+}
+
+func castRepos(repos []pr.Repository) []*dashboardv1.Repository {
 	grpcRepos := make([]*dashboardv1.Repository, 0, len(repos))
 	for _, repo := range repos {
 		grpcPRs := make([]*dashboardv1.PullRequest, 0, len(repo.PullRequests))
@@ -81,7 +76,5 @@ func (g *GRPC) StreamPullRequests(request *dashboardv1.StreamPullRequestsRequest
 			Pullrequests: grpcPRs,
 		})
 	}
-	return &dashboardv1.ListPullRequestsResponse{
-		Items: grpcRepos,
-	}, nil
+	return grpcRepos
 }

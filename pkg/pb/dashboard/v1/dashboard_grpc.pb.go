@@ -59,7 +59,7 @@ func (c *dashboardServiceClient) StreamPullRequests(ctx context.Context, in *Str
 }
 
 type DashboardService_StreamPullRequestsClient interface {
-	Recv() (*PullRequest, error)
+	Recv() (*ListPullRequestsResponse, error)
 	grpc.ClientStream
 }
 
@@ -67,8 +67,8 @@ type dashboardServiceStreamPullRequestsClient struct {
 	grpc.ClientStream
 }
 
-func (x *dashboardServiceStreamPullRequestsClient) Recv() (*PullRequest, error) {
-	m := new(PullRequest)
+func (x *dashboardServiceStreamPullRequestsClient) Recv() (*ListPullRequestsResponse, error) {
+	m := new(ListPullRequestsResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ func _DashboardService_StreamPullRequests_Handler(srv interface{}, stream grpc.S
 }
 
 type DashboardService_StreamPullRequestsServer interface {
-	Send(*PullRequest) error
+	Send(*ListPullRequestsResponse) error
 	grpc.ServerStream
 }
 
@@ -142,7 +142,7 @@ type dashboardServiceStreamPullRequestsServer struct {
 	grpc.ServerStream
 }
 
-func (x *dashboardServiceStreamPullRequestsServer) Send(m *PullRequest) error {
+func (x *dashboardServiceStreamPullRequestsServer) Send(m *ListPullRequestsResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 

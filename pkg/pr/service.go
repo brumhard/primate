@@ -33,7 +33,7 @@ const (
 
 type StreamerService interface {
 	Service
-	StreamAllPRs() (chan []Repository, error)
+	StreamAllPRs(ctx context.Context) (chan []Repository, error)
 }
 
 type Service interface {

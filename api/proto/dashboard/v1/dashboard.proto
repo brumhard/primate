@@ -15,7 +15,7 @@ option go_package = "github.com/brumhard/pr-dashboard/pkg/pb;dashboard";
 
 service DashboardService {
   rpc ListPullRequests(ListPullRequestsRequest) returns (ListPullRequestsResponse) {}
-  rpc StreamPullRequests(StreamPullRequestsRequest) returns (stream PullRequest) {}
+  rpc StreamPullRequests(StreamPullRequestsRequest) returns (stream ListPullRequestsResponse) {}
 }
 
 message ListPullRequestsRequest {}

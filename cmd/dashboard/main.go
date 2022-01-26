@@ -38,25 +38,31 @@ func main() {
 }
 
 type Config struct {
-	GRPCAddr    string
-	GRPCWebAddr string
-	LogLevel    zapcore.Level
-	Providers   []pr.ProviderConfiguration
+	GRPCAddr        string
+	GRPCWebAddr     string
+	LogLevel        zapcore.Level
+	Providers       []pr.ProviderConfiguration
+	RefreshInterval time.Duration
 }
 
 func run() error {
 	cfgLoader := alligotor.New(
-		alligotor.NewFilesSource("./configs/config.yaml", "/Users/brumhard/repos/personal/pr-dashboard/configs/config.yaml"))
+		alligotor.NewFilesSource("./configs/config.yaml", "/Users/brumhard/repos/personal/pr-dashboard/configs/config.yaml"),
+		alligotor.NewEnvSource("helpr"),
+	)
 	config := Config{
-		LogLevel:    zapcore.InfoLevel,
-		GRPCWebAddr: ":8080",
-		GRPCAddr:    ":8081",
+		LogLevel:        zapcore.InfoLevel,
+		GRPCWebAddr:     ":8080",
+		GRPCAddr:        ":8081",
+		RefreshInterval: 2 * time.Minute,
 	}
 	if err := cfgLoader.Get(&config); err != nil {
 		return err
 	}
 
-	logger, err := zap.NewProduction()
+	loggerCfg := zap.NewProductionConfig()
+	loggerCfg.Level = zap.NewAtomicLevelAt(config.LogLevel)
+	logger, err := loggerCfg.Build()
 	if err != nil {
 		return err
 	}
@@ -68,7 +74,7 @@ func run() error {
 		return err
 	}
 
-	cached, err := pr.WithCache(aggregator)
+	cached, err := pr.WithAutoRefresh(logger.Named("autorefresh service"), aggregator, config.RefreshInterval)
 	if err != nil {
 		return err
 	}
