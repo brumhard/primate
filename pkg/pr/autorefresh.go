@@ -70,6 +70,7 @@ func (s AutoRefreshingService) run(ctx context.Context) {
 				delete(s.clients, clientc)
 			case repos := <-s.prc:
 				s.currentPRs = repos
+				s.logger.Debug("sending prs to clients", zap.Int("numClients", len(s.clients)))
 				for clientc := range s.clients {
 					go s.tryWriteToClient(ctx, clientc, repos)
 				}

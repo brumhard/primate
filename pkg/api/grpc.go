@@ -12,6 +12,7 @@ import (
 
 var _ dashboardv1.DashboardServiceServer = (*GRPC)(nil)
 
+// TODO: add proper error codes
 type GRPC struct {
 	dashboardv1.UnimplementedDashboardServiceServer
 	service pr.Service
@@ -45,6 +46,7 @@ func (g *GRPC) StreamPullRequests(request *dashboardv1.StreamPullRequestsRequest
 
 	repoc, err := streamer.StreamAllPRs(server.Context())
 	if err != nil {
+		// TODO: do not send error in case the context was closed
 		return err
 	}
 

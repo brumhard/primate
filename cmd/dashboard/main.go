@@ -130,6 +130,7 @@ func run() error {
 
 		go srv.Serve(listen)
 		<-gctx.Done()
+		// TODO: fix: "Drain() is not implemented"
 		srv.GracefulStop()
 
 		logger.Info("finished shutting down grpc server")

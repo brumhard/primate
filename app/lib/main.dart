@@ -20,7 +20,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ThemeService>(create: (_) => ThemeService()),
-        Provider<PrService>(create: (_) => PrService(endpoint: "localhost")),
+        Provider<PrService>(
+          create: (_) => PrService(endpoint: "localhost"),
+          dispose: (_, prService) => prService.dispose(),
+        ),
       ],
       child: Consumer<ThemeService>(
         builder: (context, themeService, child) {
@@ -78,15 +81,20 @@ class Home extends StatelessWidget {
               stream: prService.stream,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(snapshot.error.toString()),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                    ),
-                  );
+                  // fix for showing snackbar during builder:
+                  // https://stackoverflow.com/questions/54230331/what-is-the-fancy-way-to-use-snackbar-in-streambuilder
+                  WidgetsBinding.instance!.addPostFrameCallback((_) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(snapshot.error.toString()),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                      ),
+                    );
+                  });
                 }
 
-                if (!snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting ||
+                    !snapshot.hasData) {
                   return ListView(
                     children: const [
                       RepositoryCardSkeleton(),
