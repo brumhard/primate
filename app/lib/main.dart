@@ -1,3 +1,4 @@
+import 'package:primate/services/config.dart';
 import 'package:primate/services/pr.dart';
 import 'package:primate/services/theme.dart';
 import 'package:primate/ui/animate_once.dart';
@@ -22,7 +23,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ThemeService>(create: (_) => ThemeService()),
         Provider<PrService>(
-          create: (_) => PrService(endpoint: "localhost"),
+          create: (_) => PrService(
+            endpoint: ConfigService.backendHost,
+            grpcWebPort: ConfigService.grpcWebPort,
+          ),
           dispose: (_, prService) => prService.dispose(),
         ),
       ],
