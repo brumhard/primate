@@ -29,7 +29,11 @@ run: fmt ## Run the app
 test-build: ## Tests whether the code compiles
 	@go build -o /dev/null ./...
 
-build: out/bin ## Builds all binaries
+build: app/build/web out/bin ## Builds all binaries
+
+.PHONY: app/build/web
+app/build/web:
+	cd app && flutter build web
 
 GO_BUILD = mkdir -pv "$(@)" && go build -ldflags="-w -s" -o "$(@)" ./...
 .PHONY: out/bin
