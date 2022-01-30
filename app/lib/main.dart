@@ -5,6 +5,7 @@ import 'package:app/ui/colors.dart';
 import 'package:app/ui/repo_card.dart';
 import 'package:app/ui/skeletons/skeleton_repo_card.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -58,7 +59,11 @@ class Home extends StatelessWidget {
                 listenable: prService.isLoading,
               ),
             ),
-            Text(title),
+            Text(
+              title,
+              style: GoogleFonts.novaMono(
+                  textStyle: Theme.of(context).textTheme.headline5),
+            ),
             Container()
           ],
         ),
