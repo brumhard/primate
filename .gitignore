@@ -3,6 +3,7 @@
 ###########
 
 configs/config.yaml
+deployments/primate/values_*.yaml
 cmd/testing/
 
 # make output

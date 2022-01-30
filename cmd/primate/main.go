@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"crypto/tls"
+	"errors"
+	"flag"
 	"fmt"
 	"io/fs"
 	"net"
@@ -46,9 +48,20 @@ type Config struct {
 }
 
 func run() error {
+	configPath := flag.String("config", "", "path to the config file.")
+	flag.Parse()
+
+	if configPath == nil || *configPath == "" {
+		return errors.New("config flag must be set")
+	}
+
+	if _, err := os.Stat(*configPath); err != nil {
+		return errors.New("config flag needs to be a valid path")
+	}
+
 	cfgLoader := alligotor.New(
-		alligotor.NewFilesSource("./configs/config.yaml", "/Users/brumhard/repos/personal/pr-dashboard/configs/config.yaml"),
-		alligotor.NewEnvSource("helpr"),
+		alligotor.NewFilesSource(*configPath),
+		alligotor.NewEnvSource("primate"),
 	)
 	config := Config{
 		LogLevel:        zapcore.InfoLevel,
@@ -68,6 +81,16 @@ func run() error {
 	}
 
 	defer logger.Sync()
+
+	numSources := 0
+	for _, p := range config.Providers {
+		numSources += len(p.Repositories)
+	}
+
+	if numSources < 1 {
+		return errors.New("should configure at least one valid provider")
+	}
+	logger.Info("configured providers", zap.Int("numProviders", len(config.Providers)), zap.Int("numSources", numSources))
 
 	aggregator, err := pr.NewAggregatorService(config.Providers)
 	if err != nil {
@@ -108,6 +131,11 @@ func run() error {
 			MinVersion: tls.VersionTLS12,
 		},
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			logger.Info(r.URL.Path)
+			if r.URL.Path == "/healthz" {
+				_, _ = fmt.Fprintln(w, "all good")
+				return
+			}
 			if wrapped.IsGrpcWebRequest(r) || wrapped.IsAcceptableGrpcCorsRequest(r) || wrapped.IsGrpcWebSocketRequest(r) {
 				wrapped.ServeHTTP(w, r)
 				return

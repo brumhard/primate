@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "primate.fullname" . }}
+  labels:
+    {{- include "primate.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "primate.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "primate.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "primate.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: proxy
+          image: quay.io/oauth2-proxy/oauth2-proxy:latest
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - "--config"
+            - "/config/config.cfg"
+          ports:
+            - name: http
+              containerPort: 4180
+              protocol: TCP
+          # use proxied healthz endpoint to make sure the whole app is up
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          volumeMounts:
+          - name: config
+            subPath: proxy.cfg
+            mountPath: /config/config.cfg
+          {{-  if .Values.proxy.htpasswd.enabled}}
+          - name: config
+            subPath: htpasswd
+            mountPath: /config/users.txt
+          {{- end}}
+          {{-  if .Values.proxy.authenticatedEmails}}
+          - name: config
+            subPath: emails.txt
+            mountPath: /config/emails.txt
+          {{- end}}
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - "--config"
+            - "/config/config.yaml"
+          env:
+            - name: PRIMATE_GRPCWEBADDR
+              value: "localhost:8080"
+            - name: PRIMATE_GRPCADDR
+              value: "localhost:8081"
+          volumeMounts:
+          - name: config
+            subPath: primate.yaml
+            mountPath: /config/config.yaml
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+      volumes:
+      - name: config
+        secret:
+          secretName: {{ include "primate.fullname" . }}-config
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

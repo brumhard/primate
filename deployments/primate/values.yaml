@@ -1,0 +1,127 @@
+# Default values for primate.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/brumhard/primate
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+proxy:
+  # required
+  cookieSecret: ""
+  # required
+  provider: ""
+  # required
+  clientId: ""
+  # required
+  clientSecret: ""
+  ## the OAuth Redirect URL.
+  # defaults to the "https://" + requested host header + "/oauth2/callback"
+  # redirect_url = "https://internalapp.yourcompany.com/oauth2/callback"
+  redirectUrl: ""
+  # list of all allowed email domains, either this or authenticatedEmails should be set
+  emailDomains: {}
+  # list of allowed email addresses
+  authenticatedEmails: {}
+  htpasswd:
+    # Additionally authenticate against a htpasswd file. Entries must be created with "htpasswd -s" for SHA encryption.
+    enabled: false
+    # One row for each user
+    # example:
+    # entries:
+    #  - testuser:{SHA}EWhzdhgoYJWy0z2gyzhRYlN9DSiv
+    entries: {}
+
+# copied from configs/config_example.yaml
+primateConfig: |
+  providers:
+    - providerType: "azuredevops"
+      repositories:
+        - "project/repo"
+      extraConfig:
+        organizationUrl: "https://dev.azure.com/myorg"
+        pat: "xxxxxxxxxx"
+    - providerType: "github"
+      repositories:
+        - "owner/repo"
+      extraConfig:
+        pat: "xxxxxxxxxx"
+    - providerType: "bitbucketv1"
+      repositories:
+        # for repo name also regex is allowed. The following example would fetch all repositories in the project "project"
+        - "project/.*"
+      extraConfig:
+        baseUrl: "http://localhost:7990/rest"
+        pat: "xxxxxxxxxx"
