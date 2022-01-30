@@ -1,5 +1,5 @@
-import 'package:app/ui/skeletons/skeleton.dart';
-import 'package:app/ui/skeletons/skeleton_pr_card.dart';
+import 'package:primate/ui/skeletons/skeleton.dart';
+import 'package:primate/ui/skeletons/skeleton_pr_card.dart';
 import 'package:flutter/material.dart';
 
 class RepositoryCardSkeleton extends StatelessWidget {

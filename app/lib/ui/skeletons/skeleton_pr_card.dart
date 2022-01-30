@@ -1,4 +1,4 @@
-import 'package:app/ui/skeletons/skeleton.dart';
+import 'package:primate/ui/skeletons/skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

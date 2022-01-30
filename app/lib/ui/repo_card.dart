@@ -1,5 +1,5 @@
-import 'package:app/services/pr.dart';
-import 'package:app/ui/pr_card.dart';
+import 'package:primate/services/pr.dart';
+import 'package:primate/ui/pr_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';

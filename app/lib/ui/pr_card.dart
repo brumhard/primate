@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:app/services/pr.dart';
-import 'package:app/ui/colors.dart';
+import 'package:primate/services/pr.dart';
+import 'package:primate/ui/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';

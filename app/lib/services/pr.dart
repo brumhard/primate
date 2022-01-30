@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:app/pb/dashboard/v1/dashboard.pbgrpc.dart';
+import 'package:primate/pb/dashboard/v1/dashboard.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc_or_grpcweb.dart';
 

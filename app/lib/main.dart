@@ -1,9 +1,9 @@
-import 'package:app/services/pr.dart';
-import 'package:app/services/theme.dart';
-import 'package:app/ui/animate_once.dart';
-import 'package:app/ui/colors.dart';
-import 'package:app/ui/repo_card.dart';
-import 'package:app/ui/skeletons/skeleton_repo_card.dart';
+import 'package:primate/services/pr.dart';
+import 'package:primate/services/theme.dart';
+import 'package:primate/ui/animate_once.dart';
+import 'package:primate/ui/colors.dart';
+import 'package:primate/ui/repo_card.dart';
+import 'package:primate/ui/skeletons/skeleton_repo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';

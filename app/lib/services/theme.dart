@@ -1,4 +1,4 @@
-import 'package:app/ui/colors.dart';
+import 'package:primate/ui/colors.dart';
 import 'package:flutter/material.dart';
 
 // TODO: save to shared preferences
