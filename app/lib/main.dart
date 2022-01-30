@@ -28,9 +28,9 @@ class MyApp extends StatelessWidget {
       child: Consumer<ThemeService>(
         builder: (context, themeService, child) {
           return MaterialApp(
-            title: 'PullRequest Dashboard',
+            title: 'pr:mate',
             theme: themeService.theme,
-            home: const Home(title: 'PullRequest Dashboard'),
+            home: const Home(title: 'pr:mate'),
           );
         },
       ),

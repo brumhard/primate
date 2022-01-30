@@ -25,7 +25,7 @@ COPY --from=web-build /app/build/web ./app/build/web
 # temp mount all files instead of loading into image with COPY
 # temp mount go build cache
 RUN --mount=type=cache,target=/root/.cache/go-build \
-    go build -ldflags="-w -s" -o /app/main ./cmd/dashboard/*.go
+    go build -ldflags="-w -s" -o /app/main ./cmd/primate/*.go
 
 # Import the binary from build stage
 FROM gcr.io/distroless/static:nonroot as prd

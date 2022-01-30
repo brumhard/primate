@@ -3,8 +3,8 @@ PWD = $(shell pwd)
 
 # constants
 GOLANGCI_VERSION = 1.43.0
-DOCKER_REPO = dashboard
-DOCKER_TAG = latest
+DOCKER_REPO = ghcr.io/brumhard/primate
+DOCKER_TAG = $(shell git rev-parse --short HEAD)
 
 all: git-hooks generate tidy ## Initializes all tools
 
@@ -24,7 +24,7 @@ fmt: ## Formats all code with go fmt
 	@go fmt ./...
 
 run: fmt ## Run the app
-	@go run ./cmd/dashboard/main.go
+	@go run ./cmd/primate/main.go
 
 test-build: ## Tests whether the code compiles
 	@go build -o /dev/null ./...
@@ -105,7 +105,7 @@ protolint: bin/buf bin/protoc-gen-buf-lint ## Lints your protobuf files
 	bin/buf lint
 
 protobreaking: bin/buf bin/protoc-gen-buf-breaking ## Compares your current protobuf with the version on master to find breaking changes
-	bin/buf breaking --against '.git#branch=master'
+	bin/buf breaking --against '.git#branch=main'
 
 generate: ## Generates code from protobuf files
 generate: api/proto/google api/proto/validate  bin/buf bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-validate

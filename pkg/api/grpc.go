@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	dashboardv1 "github.com/brumhard/pr-dashboard/pkg/pb/dashboard/v1"
-	"github.com/brumhard/pr-dashboard/pkg/pr"
+	dashboardv1 "github.com/brumhard/primate/pkg/pb/dashboard/v1"
+	"github.com/brumhard/primate/pkg/pr"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

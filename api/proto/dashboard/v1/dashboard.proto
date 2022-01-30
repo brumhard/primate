@@ -11,7 +11,7 @@ import "validate/validate.proto";
 
 // Defines the import path that should be used to import the generated package,
 // and the package name.
-option go_package = "github.com/brumhard/pr-dashboard/pkg/pb;dashboard";
+option go_package = "github.com/brumhard/primate/pkg/pb;dashboard";
 
 service DashboardService {
   rpc ListPullRequests(ListPullRequestsRequest) returns (ListPullRequestsResponse) {}

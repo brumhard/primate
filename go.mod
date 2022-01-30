@@ -1,4 +1,4 @@
-module github.com/brumhard/pr-dashboard
+module github.com/brumhard/primate
 
 go 1.17
 

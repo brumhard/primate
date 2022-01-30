@@ -1,6 +1,6 @@
-# pr-dashboard
+# `pr:mate`
 
-[![GoTemplate](https://img.shields.io/badge/go/template-black?logo=go)](https://github.com/SchwarzIT/go-template) 
+[![GoTemplate](https://img.shields.io/badge/go/template-black?logo=go)](https://github.com/SchwarzIT/go-template)
 
 Pluggable dashboard to make PRs from multiple sources on multiple repos visible.
 
