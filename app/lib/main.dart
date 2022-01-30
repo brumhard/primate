@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
           create: (_) => PrService(
             endpoint: ConfigService.backendHost,
             grpcWebPort: ConfigService.grpcWebPort,
+            secureTransport: ConfigService.httpsEnabled,
           ),
           dispose: (_, prService) => prService.dispose(),
         ),

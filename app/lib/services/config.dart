@@ -14,4 +14,14 @@ class ConfigService {
     }
     throw Exception("not implemented for a platform other than web");
   }
+
+  static bool get httpsEnabled {
+    if (kIsWeb) {
+      if (!Uri.base.hasScheme) {
+        return true;
+      }
+      return Uri.base.isScheme("HTTPS");
+    }
+    throw Exception("not implemented for a platform other than web");
+  }
 }

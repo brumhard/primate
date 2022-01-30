@@ -10,14 +10,20 @@ class PrService {
       StreamController.broadcast();
   final ValueNotifier<bool> _isLoading = ValueNotifier(false);
 
-  PrService({required endpoint, grpcPort = 8081, grpcWebPort = 8080}) {
+  PrService({
+    required endpoint,
+    grpcPort = 8081,
+    grpcWebPort = 8080,
+    secureTransport = false,
+  }) {
     GrpcOrGrpcWebClientChannel channel =
         GrpcOrGrpcWebClientChannel.toSeparatePorts(
-            host: endpoint,
-            grpcPort: grpcPort,
-            grpcTransportSecure: false,
-            grpcWebPort: grpcWebPort,
-            grpcWebTransportSecure: false);
+      host: endpoint,
+      grpcPort: grpcPort,
+      grpcTransportSecure: secureTransport,
+      grpcWebPort: grpcWebPort,
+      grpcWebTransportSecure: secureTransport,
+    );
     client = DashboardServiceClient(channel);
 
     _controller.onListen = () => loadPRs();
