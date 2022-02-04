@@ -37,8 +37,18 @@ func NewGitHubProvider(cfg *GitHubConfig) (*GitHub, error) {
 func (g GitHub) ListRepositoriesForProject(ctx context.Context, project string) ([]string, error) {
 	var repoNames []string
 
+	listFunc := func(ctx context.Context, project string, opts github.ListOptions) ([]*github.Repository, *github.Response, error) {
+		return g.client.Repositories.List(ctx, project, &github.RepositoryListOptions{ListOptions: opts})
+	}
+	// check if it's an org, since then ListByOrg is needed to also list private repos
+	if _, _, err := g.client.Organizations.Get(ctx, project); err == nil {
+		listFunc = func(ctx context.Context, project string, opts github.ListOptions) ([]*github.Repository, *github.Response, error) {
+			return g.client.Repositories.ListByOrg(ctx, project, &github.RepositoryListByOrgOptions{ListOptions: opts})
+		}
+	}
+
 	err := g.forEachPage(func(opts github.ListOptions) (*github.Response, error) {
-		repos, resp, err := g.client.Repositories.List(ctx, project, &github.RepositoryListOptions{ListOptions: opts})
+		repos, resp, err := listFunc(ctx, project, opts)
 		if err != nil {
 			return nil, err
 		}
