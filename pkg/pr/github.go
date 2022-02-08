@@ -38,6 +38,9 @@ func (g GitHub) ListRepositoriesForProject(ctx context.Context, project string) 
 	var repoNames []string
 
 	listFunc := func(ctx context.Context, project string, opts github.ListOptions) ([]*github.Repository, *github.Response, error) {
+		// FIXME: this doesn't work for private repos
+		// "https://api.github.com/search/repositories?q=user:brumhard" shows all private repos also but no forks which sucks
+		// https://api.github.com/user/repos?type=owner shows all repos including private and forks but only for the current user
 		return g.client.Repositories.List(ctx, project, &github.RepositoryListOptions{ListOptions: opts})
 	}
 	// check if it's an org, since then ListByOrg is needed to also list private repos
