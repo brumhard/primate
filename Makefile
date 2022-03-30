@@ -88,28 +88,22 @@ define make-go-dependency
 	GOBIN=$(PWD)/bin go install $1
 endef
 
+.PHONY: api/proto/buf.lock
+api/proto/buf.lock: bin/buf
+	@bin/buf mod update api/proto
+
 # this creates a target for each go dependency to be referenced in other targets
 $(foreach dep, $(GO_DEPENDENCIES), $(eval $(call make-go-dependency, $(dep))))
 
-api/proto/google:
-	@mkdir -p api/proto/google/api
-	curl -s https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/annotations.proto -o api/proto/google/api/annotations.proto
-	curl -s https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/http.proto -o api/proto/google/api/http.proto
-	curl -s https://raw.githubusercontent.com/googleapis/googleapis/master/google/api/field_behavior.proto -o api/proto/google/api/field_behavior.proto
-
-api/proto/validate:
-	@mkdir -p api/proto/validate
-	curl -s https://raw.githubusercontent.com/envoyproxy/protoc-gen-validate/main/validate/validate.proto -o api/proto/validate/validate.proto
-
-protolint: bin/buf bin/protoc-gen-buf-lint ## Lints your protobuf files
+protolint: api/proto/buf.lock bin/protoc-gen-buf-lint ## Lints your protobuf files
 	bin/buf lint
 
-protobreaking: bin/buf bin/protoc-gen-buf-breaking ## Compares your current protobuf with the version on master to find breaking changes
+protobreaking: api/proto/buf.lock bin/protoc-gen-buf-breaking ## Compares your current protobuf with the version on master to find breaking changes
 	bin/buf breaking --against '.git#branch=main'
 
 generate: ## Generates code from protobuf files
-generate: api/proto/google api/proto/validate  bin/buf bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-validate
-	PATH=$(PWD)/bin:$$PATH buf generate --path api/proto/dashboard/v1/dashboard.proto
+generate: api/proto/buf.lock bin/protoc-gen-go bin/protoc-gen-go-grpc bin/protoc-gen-validate
+	PATH=$(PWD)/bin:$$PATH buf generate
 
 ci: lint-reports test-reports ## Executes lint and test and generates reports
 
