@@ -4,9 +4,9 @@ import 'package:primate/services/pr.dart';
 import 'package:primate/ui/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:crypto/crypto.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PRCard extends StatefulWidget {
   final PR pr;
@@ -93,20 +93,18 @@ List<Widget> cardContentForSize(BuildContext context, PR pr) {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      pr.title,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    Row(
+                      children: [
+                        conditionallyColoredDuration(context, pr.created),
+                        Text(
+                          pr.title,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ]
                     ),
                     Text(
                       "${pr.sourceBranch} \u{2192} ${pr.targetBranch}",
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.overline,
-                    ),
-                    Text(
-                      DateFormat("dd MMM. yyyy").format(pr.created) +
-                          " by " +
-                          pr.user,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.overline,
                     ),
@@ -156,10 +154,7 @@ List<Widget> cardContentForSize(BuildContext context, PR pr) {
           ),
           Row(
             children: [
-              Text(
-                DateFormat("dd MMM. yyyy").format(pr.created),
-                overflow: TextOverflow.ellipsis,
-              ),
+              conditionallyColoredDuration(context, pr.created),
               Padding(
                 padding: const EdgeInsets.only(left: 5),
                 child: Tooltip(
@@ -192,4 +187,32 @@ IconData iconForPRStatus(String status) {
     default:
       return FontAwesomeIcons.codeBranch;
   }
+}
+
+Widget conditionallyColoredDuration(BuildContext context, DateTime created) {
+  DateTime now = DateTime.now();
+  int ageInHours = now.difference(created).inHours;
+  Color color = Theme.of(context).colorScheme.rotten;
+
+  if (ageInHours < 24*14) {
+    color = Theme.of(context).colorScheme.stale;
+  }
+  
+  if (ageInHours < 24*5) {
+    color = Theme.of(context).colorScheme.waiting;
+  }
+
+  if (ageInHours < 8) {
+    color = Theme.of(context).colorScheme.fresh;
+  }
+
+  return Container(
+    margin: const EdgeInsets.fromLTRB(0, 6, 6, 6),
+    padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: const BorderRadius.all(Radius.circular(20))
+    ),
+    child: Text(timeago.format(created)),
+  );
 }
