@@ -93,21 +93,17 @@ List<Widget> cardContentForSize(BuildContext context, PR pr) {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        conditionallyColoredDuration(context, pr.created),
-                        Text(
-                          pr.title,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ]
+                    Text(
+                      pr.title,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       "${pr.sourceBranch} \u{2192} ${pr.targetBranch}",
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.overline,
                     ),
+                    conditionallyColoredDuration(context, pr.created)
                   ],
                 ),
               ),
