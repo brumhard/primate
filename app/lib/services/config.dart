@@ -1,7 +1,10 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, kDebugMode;
 
 class ConfigService {
-  static String get backendHost {
+    static String get backendHost {
+    if (kDebugMode) {
+      return 'localhost';
+    }
     if (kIsWeb) {
       return Uri.base.host;
     }
@@ -9,6 +12,9 @@ class ConfigService {
   }
 
   static int get grpcWebPort {
+    if (kDebugMode) {
+      return 8080;
+    }
     if (kIsWeb) {
       return Uri.base.port;
     }
