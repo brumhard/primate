@@ -24,8 +24,8 @@ MaterialColor createMaterialColor(Color color) {
 }
 
 extension CustomColorScheme on ColorScheme {
-  Color get fresh => brightness == Brightness.light? const Color.fromARGB(255, 193, 201, 236) : const Color.fromARGB(255, 50, 73, 173);
-  Color get waiting => brightness == Brightness.light? const Color.fromARGB(255, 214, 246, 201) : const Color.fromARGB(255, 48, 126, 17);
-  Color get stale => brightness == Brightness.light? const Color.fromARGB(255, 231, 200, 200) : const Color.fromARGB(255, 141, 41, 41);
-  Color get rotten => brightness == Brightness.light? const Color.fromARGB(255, 195, 178, 149) : const Color.fromARGB(255, 116, 80, 23);
+  Color get fresh => brightness == Brightness.light? const Color.fromARGB(255, 201, 211, 248) : const Color.fromARGB(255, 59, 96, 228);
+  Color get waiting => brightness == Brightness.light? const Color.fromARGB(255, 215, 234, 224) : const Color.fromARGB(255, 81, 152, 114);
+  Color get stale => brightness == Brightness.light? const Color.fromARGB(255, 244, 184, 194) : const Color.fromARGB(255, 114, 17, 33);
+  Color get rotten => brightness == Brightness.light? const Color.fromARGB(255, 235, 219, 193) : const Color.fromARGB(255, 86, 63, 27);
 }
