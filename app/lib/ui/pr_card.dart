@@ -103,7 +103,7 @@ List<Widget> cardContentForSize(BuildContext context, PR pr) {
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.overline,
                     ),
-                    conditionallyColoredDuration(context, pr.created)
+                    Text(timeago.format(pr.created)),
                   ],
                 ),
               ),
