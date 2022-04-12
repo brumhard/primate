@@ -187,18 +187,18 @@ IconData iconForPRStatus(String status) {
 
 Widget conditionallyColoredDuration(BuildContext context, DateTime created) {
   DateTime now = DateTime.now();
-  int ageInHours = now.difference(created).inHours;
+  int ageInHours = now.difference(created).inDays;
   Color color = Theme.of(context).colorScheme.rotten;
 
-  if (ageInHours < 24*14) {
+  if (ageInHours < 14) {
     color = Theme.of(context).colorScheme.stale;
   }
   
-  if (ageInHours < 24*5) {
+  if (ageInHours < 5) {
     color = Theme.of(context).colorScheme.waiting;
   }
 
-  if (ageInHours < 8) {
+  if (ageInHours < 1) {
     color = Theme.of(context).colorScheme.fresh;
   }
 
