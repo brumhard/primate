@@ -1,0 +1,15 @@
+apiVersion: v1
+entries:
+  primate:
+  - apiVersion: v2
+    appVersion: v0.1.2
+    created: "2022-04-13T15:03:18.252192832Z"
+    description: Pluggable dashboard to make PRs from multiple sources on multiple
+      repos visible.
+    digest: 1cd3b1d11e8a22eddedd5f76bf95c4453c94498d86d1af24a98d8ecb06623d6f
+    name: primate
+    type: application
+    urls:
+    - https://github.com/brumhard/primate/releases/download/primate-chart-0.1.0/primate-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-04-13T15:03:18.253203832Z"
