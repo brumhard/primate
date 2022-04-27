@@ -22,3 +22,18 @@ MaterialColor createMaterialColor(Color color) {
   }
   return MaterialColor(color.value, swatch);
 }
+
+extension CustomColorScheme on ColorScheme {
+  Color get fresh => brightness == Brightness.light
+      ? const Color(0xFFc9d3f8)
+      : const Color(0xFF3b60e4);
+  Color get waiting => brightness == Brightness.light
+      ? const Color(0xFFd7eae0)
+      : const Color(0xFF519872);
+  Color get stale => brightness == Brightness.light
+      ? const Color(0xFFf4b8c2)
+      : const Color(0xFF721121);
+  Color get rotten => brightness == Brightness.light
+      ? const Color(0xFFebdbc1)
+      : const Color(0xFF563f1b);
+}
