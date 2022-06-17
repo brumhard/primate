@@ -113,8 +113,11 @@ class Home extends StatelessWidget {
                     ],
                   );
                 }
-
-                if (DateTime.now().isAfter(DateTime(2022, 6, 17, 7, 0, 0))) {
+                DateTime now = DateTime.now();
+                DateTime date = DateTime(2022, 6, 32, 7, 0, 0);
+                if (now.year == date.year &&
+                    now.month == date.month &&
+                    now.day == date.day) {
                   return const Bye();
                 }
 
