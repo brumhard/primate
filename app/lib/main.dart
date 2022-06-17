@@ -2,6 +2,7 @@ import 'package:primate/services/config.dart';
 import 'package:primate/services/pr.dart';
 import 'package:primate/services/theme.dart';
 import 'package:primate/ui/animate_once.dart';
+import 'package:primate/ui/bye.dart';
 import 'package:primate/ui/colors.dart';
 import 'package:primate/ui/repo_card.dart';
 import 'package:primate/ui/skeletons/skeleton_repo_card.dart';
@@ -111,6 +112,10 @@ class Home extends StatelessWidget {
                       RepositoryCardSkeleton()
                     ],
                   );
+                }
+
+                if (DateTime.now().isAfter(DateTime(2022, 6, 17, 7, 0, 0))) {
+                  return const Bye();
                 }
 
                 List<Repository> repos = snapshot.data!;
