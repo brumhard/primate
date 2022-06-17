@@ -34,10 +34,17 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<ThemeService>(
         builder: (context, themeService, child) {
+          String title = "pr:mate";
+          String homeTitle = title;
+          if (ConfigService.todayIsTheDay) {
+            title = 'Kuss geht raus';
+            homeTitle = "Liebe Harry... Liebe <3";
+          }
+
           return MaterialApp(
-            title: 'Kuss geht raus',
+            title: title,
             theme: themeService.theme,
-            home: const Home(title: 'Liebe Harry... Liebe <3'),
+            home: Home(title: homeTitle),
           );
         },
       ),
@@ -113,11 +120,8 @@ class Home extends StatelessWidget {
                     ],
                   );
                 }
-                DateTime now = DateTime.now();
-                DateTime date = DateTime(2022, 6, 32, 7, 0, 0);
-                if (now.year == date.year &&
-                    now.month == date.month &&
-                    now.day == date.day) {
+
+                if (ConfigService.todayIsTheDay) {
                   return const Bye();
                 }
 

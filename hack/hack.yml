@@ -1,0 +1,82 @@
+---
+# kuberenetes role to edit deployment
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: trolololol
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "patch", "update"]
+---
+# kuberenetes rolebinding to edit deployment
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: trolololol
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: trolololol
+subjects:
+  - kind: ServiceAccount
+    name: trolololol
+---
+# kuberenetes serviceaccount to edit deployment
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: trolololol
+---
+# cronjob to run container every 30 seconds
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: trolololol
+spec:
+  schedule: "* * * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 10
+      template:
+        spec:
+          restartPolicy: Never
+          serviceAccountName: trolololol
+          containers:
+            - name: trolololol
+              image: nixery.dev/shell/kubectl
+              command:
+                - "/bin/bash"
+                - "-c"
+                - |-
+                  set -e
+
+                  echo "        ,----,                                                                                                                                                ";
+                  echo "      ,/   .\`|                                                                                                                                                ";
+                  echo "    ,\`   .'  :                   ,--,    ,--,                                                                                                                 ";
+                  echo "  ;    ;     /                 ,--.'|  ,--.'|             ,--,                       ,-.----.                                                                 ";
+                  echo ".'___,/    ,' __  ,-.   ,---.  |  | :  |  | :           ,--.'|         ,---,         \    /  \   __  ,-.   ,---.                                              ";
+                  echo "|    :     |,' ,'/ /|  '   ,'\ :  : '  :  : '           |  |,      ,-+-. /  |        |   :    |,' ,'/ /|  '   ,'\                       .--.--.    .--.--.    ";
+                  echo ";    |.';  ;'  | |' | /   /   ||  ' |  |  ' |           \`--'_     ,--.'|'   |        |   | .\ :'  | |' | /   /   |   ,---.     ,---.   /  /    '  /  /    '   ";
+                  echo "\`----'  |  ||  |   ,'.   ; ,. :'  | |  '  | |           ,' ,'|   |   |  ,\"' |        .   : |: ||  |   ,'.   ; ,. :  /     \   /     \ |  :  /\`./ |  :  /\`./   ";
+                  echo "    '   :  ;'  :  /  '   | |: :|  | :  |  | :           '  | |   |   | /  | |        |   |  \ :'  :  /  '   | |: : /    / '  /    /  ||  :  ;_   |  :  ;_     ";
+                  echo "    |   |  '|  | '   '   | .; :'  : |__'  : |__         |  | :   |   | |  | |        |   : .  ||  | '   '   | .; :.    ' /  .    ' / | \  \    \`. \  \    \`.  ";
+                  echo "    '   :  |;  : |   |   :    ||  | '.'|  | '.'|        '  : |__ |   | |  |/         :     |\`-';  : |   |   :    |'   ; :__ '   ;   /|  \`----.   \ \`----.   \ ";
+                  echo "    ;   |.' |  , ;    \   \  / ;  :    ;  :    ;        |  | '.'||   | |--'          :   : :   |  , ;    \   \  / '   | '.'|'   |  / | /  /\`--'  //  /\`--'  / ";
+                  echo "    '---'    ---'      \`----'  |  ,   /|  ,   /         ;  :    ;|   |/              |   | :    ---'      \`----'  |   :    :|   :    |'--'.     /'--'.     /  ";
+                  echo "                                ---\`-'  ---\`-'          |  ,   / '---'               \`---'.|                       \   \  /  \   \  /   \`--'---'   \`--'---'   ";
+                  echo "                                                         ---\`-'                        \`---\`                        \`----'    \`----'                          ";
+
+                  echo "setting primate image."
+
+                  echo "doing the magic."
+
+                  kubectl \
+                    -n $$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) \
+                    set image deployments/primate primate=ghcr.io/brumhard/primate:v0.2.0-ske2
+
+                  echo "done."
+                  echo ""
+                  echo "cya."
