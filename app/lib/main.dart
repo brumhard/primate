@@ -34,9 +34,9 @@ class MyApp extends StatelessWidget {
       child: Consumer<ThemeService>(
         builder: (context, themeService, child) {
           return MaterialApp(
-            title: 'pr:mate',
+            title: 'Kuss geht raus',
             theme: themeService.theme,
-            home: const Home(title: 'pr:mate'),
+            home: const Home(title: 'Liebe Harry... Liebe <3'),
           );
         },
       ),
