@@ -33,10 +33,14 @@ class ConfigService {
 
   static bool get todayIsTheDay {
     DateTime now = DateTime.now();
-    DateTime date = DateTime(2022, 6, 23, 7, 0, 0);
+    DateTime fromDate = DateTime(2022, 6, 24, 7, 0, 0);
+    DateTime toDate = DateTime(2022, 6, 29, 7, 0, 0);
 
-    return (now.year == date.year &&
-        now.month == date.month &&
-        now.day == date.day);
+    return (now.year >= fromDate.year &&
+        now.year <= toDate.year &&
+        now.month >= fromDate.month &&
+        now.month <= toDate.month &&
+        now.day >= fromDate.day &&
+        now.day <= toDate.day);
   }
 }
