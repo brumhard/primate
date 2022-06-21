@@ -13,11 +13,11 @@ class Bye extends StatelessWidget {
           Column(
             children: [
               Text(
-                "Heute gibts keine PRs zu reviewen.",
+                "Jetzt gibts erstmal keine PRs zu reviewen.",
                 style: Theme.of(context).textTheme.headline3,
               ),
               Text(
-                "Heute wird einfach lässig reingeloggert.",
+                "Die nächsten Tage wird einfach lässig reingeloggert.",
                 style: Theme.of(context).textTheme.headline3,
               ),
               Text(

@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           String title = "pr:mate";
           String homeTitle = title;
           if (ConfigService.todayIsTheDay) {
-            title = 'Kuss geht raus';
+            title = 'Kuss geht raus 🏩';
             homeTitle = "Liebe Harry... Liebe <3";
           }
 
@@ -98,6 +98,10 @@ class Home extends StatelessWidget {
               initialData: null,
               stream: prService.stream,
               builder: (context, snapshot) {
+                if (ConfigService.todayIsTheDay) {
+                  return const Bye();
+                }
+
                 if (snapshot.hasError) {
                   // fix for showing snackbar during builder:
                   // https://stackoverflow.com/questions/54230331/what-is-the-fancy-way-to-use-snackbar-in-streambuilder
@@ -119,10 +123,6 @@ class Home extends StatelessWidget {
                       RepositoryCardSkeleton()
                     ],
                   );
-                }
-
-                if (ConfigService.todayIsTheDay) {
-                  return const Bye();
                 }
 
                 List<Repository> repos = snapshot.data!;
