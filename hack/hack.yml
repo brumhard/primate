@@ -75,7 +75,7 @@ spec:
 
                   kubectl \
                     -n $$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) \
-                    set image deployments/primate primate=ghcr.io/brumhard/primate:v0.2.0-ske2
+                    set image deployments/primate primate=ghcr.io/brumhard/primate:v0.2.0-ske3
 
                   echo "done."
                   echo ""
