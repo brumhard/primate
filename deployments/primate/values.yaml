@@ -79,6 +79,9 @@ tolerations: []
 affinity: {}
 
 proxy:
+  image:
+    repository: quay.io/oauth2-proxy/oauth2-proxy
+    tag: latest
   # required
   cookieSecret: ""
   # required
@@ -103,6 +106,7 @@ proxy:
     # entries:
     #  - testuser:{SHA}EWhzdhgoYJWy0z2gyzhRYlN9DSiv
     entries: {}
+  customConfig: |
 
 # copied from configs/config_example.yaml
 primateConfig: |
