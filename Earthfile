@@ -3,6 +3,17 @@ VERSION 0.6
 ARG OWNER=brumhard
 ARG REPO=primate
 
+# # release
+# ## app
+# - tag new app version (trigger)
+# - release new app version like in e.g. kindacool -> goreleaser and build etc
+# - release new chart patch version (with new chart tag)
+
+# ## chart
+# - tag new chart version (trigger)
+# - release new chart version (like cr update)
+# - update gh-pages index (like cr index)
+
 chart-test:
     FROM quay.io/helmpack/chart-testing
     WORKDIR /src
