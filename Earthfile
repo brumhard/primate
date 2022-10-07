@@ -9,6 +9,9 @@ chart-test:
     COPY --dir deployments/primate .
     RUN ct lint --all --validate-maintainers=false --chart-dirs .
 
+# export GITHUB_ACCESS_TOKEN=""
+# earthly --push --secret GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN +chart-release --GIT_EMAIL=code@brumhard.com --GIT_USER=Tobias Brumhard
+
 chart-release:
     FROM quay.io/helmpack/chart-releaser
     WORKDIR /src
