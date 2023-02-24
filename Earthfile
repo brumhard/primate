@@ -6,6 +6,8 @@ ARG REPO=primate
 # # release
 # ## app
 # - tag new app version (trigger)
+# LATEST_CHART_VERSION=$(git describe --tags --abbrev=0 | rg 'primate-chart-(.*)' -r '$1' |sort -V |tail -1)
+# LATEST_APP_VERSION=$(svu current)
 # - release new app version like in e.g. kindacool -> goreleaser and build etc
 # - release new chart patch version (with new chart tag)
 
